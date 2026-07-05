@@ -144,3 +144,34 @@ watermarkBtn.addEventListener("click", () => {
     "Preparing PDF...";
 
 });
+/* ==========================
+      PDF Engine
+========================== */
+
+watermarkBtn.addEventListener("click", async () => {
+
+    if (!selectedPDF) return;
+
+    progressBar.style.width = "20%";
+
+    progressText.innerHTML =
+    "Loading PDF...";
+
+    const bytes =
+        await selectedPDF.arrayBuffer();
+
+    const pdfDoc =
+        await PDFLib.PDFDocument.load(bytes);
+
+    const pages =
+        pdfDoc.getPages();
+
+    progressBar.style.width = "40%";
+
+    progressText.innerHTML =
+    "Preparing watermark...";
+
+    result.innerHTML =
+    "✅ PDF loaded successfully.";
+
+});
