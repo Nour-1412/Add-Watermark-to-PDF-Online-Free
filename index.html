@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Add Watermark to PDF Online | WebBag</title>
+
+<meta name="description"
+content="Add text or image watermark to PDF files online for free. Fast, secure and works directly in your browser.">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💧 Add Watermark to PDF</h1>
+
+    <p class="subtitle">
+        Add text or image watermark to your PDF files online.
+        No installation required.
+    </p>
+
+    <!-- Upload PDF -->
+
+    <div id="dropZone" class="upload-box">
+
+        <input type="file"
+               id="pdfInput"
+               accept=".pdf"
+               hidden>
+
+        <button id="uploadBtn">
+            📄 Choose PDF
+        </button>
+
+        <p>
+            or drag & drop your PDF here
+        </p>
+
+    </div>
+
+    <!-- Preview -->
+
+    <div id="previewBox" class="preview-box">
+
+        <p id="fileName">
+            No PDF selected
+        </p>
+
+    </div>
+
+    <!-- Watermark Type -->
+
+    <div class="card">
+
+        <label>
+
+            Watermark Type
+
+        </label>
+
+        <select id="watermarkType">
+
+            <option value="text">
+                Text
+            </option>
+
+            <option value="image">
+                Image
+            </option>
+
+        </select>
+
+    </div>
+
+    <!-- Text Watermark -->
+
+    <div id="textOptions" class="card">
+
+        <label>
+
+            Watermark Text
+
+        </label>
+
+        <input
+            type="text"
+            id="watermarkText"
+            placeholder="CONFIDENTIAL">
+
+    </div>
+
+    <!-- Image Watermark -->
+
+    <div id="imageOptions"
+         class="card"
+         style="display:none;">
+
+        <label>
+
+            Watermark Image
+
+        </label>
+
+        <input
+            type="file"
+            id="watermarkImage"
+            accept="image/*">
+
+    </div>
+
+    <!-- Position -->
+
+    <div class="card">
+
+        <label>
+
+            Position
+
+        </label>
+
+        <select id="position">
+
+            <option value="center">
+                Center
+            </option>
+
+            <option value="top-left">
+                Top Left
+            </option>
+
+            <option value="top-right">
+                Top Right
+            </option>
+
+            <option value="bottom-left">
+                Bottom Left
+            </option>
+
+            <option value="bottom-right">
+                Bottom Right
+            </option>
+
+            <option value="diagonal">
+                Diagonal
+            </option>
+
+        </select>
+
+    </div>
+
+    <!-- Opacity -->
+
+    <div class="card">
+
+        <label>
+
+            Opacity
+
+        </label>
+
+        <input
+            type="range"
+            id="opacity"
+            min="10"
+            max="100"
+            value="40">
+
+    </div>
+
+    <!-- Progress -->
+
+    <div id="progressBox">
+
+        <div class="progress">
+        </div>
+
+        <p id="progressText">
+
+            Waiting...
+
+        </p>
+
+    </div>
+
+    <!-- Convert -->
+
+    <button id="watermarkBtn">
+
+        💧 Add Watermark
+
+    </button>
+
+    <!-- Result -->
+
+    <div id="result">
+
+        Upload a PDF to start.
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+              </html>
+            <div id="progressBar"></div>
