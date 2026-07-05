@@ -69,3 +69,78 @@ function loadPDF(file){
     "✅ PDF loaded successfully.";
 
 }
+/* ==========================
+      Drag & Drop
+========================== */
+
+dropZone.addEventListener("dragover", (e) => {
+
+    e.preventDefault();
+
+    dropZone.classList.add("dragover");
+
+});
+
+dropZone.addEventListener("dragleave", () => {
+
+    dropZone.classList.remove("dragover");
+
+});
+
+dropZone.addEventListener("drop", (e) => {
+
+    e.preventDefault();
+
+    dropZone.classList.remove("dragover");
+
+    if (!e.dataTransfer.files.length) return;
+
+    loadPDF(e.dataTransfer.files[0]);
+
+});
+
+/* ==========================
+      Watermark Type
+========================== */
+
+watermarkType.addEventListener("change", () => {
+
+    if (watermarkType.value === "text") {
+
+        textOptions.style.display = "block";
+
+        imageOptions.style.display = "none";
+
+    } else {
+
+        textOptions.style.display = "none";
+
+        imageOptions.style.display = "block";
+
+    }
+
+});
+
+/* ==========================
+      Add Watermark Button
+========================== */
+
+watermarkBtn.addEventListener("click", () => {
+
+    if (!selectedPDF) {
+
+        result.innerHTML =
+        "⚠ Please upload a PDF first.";
+
+        return;
+
+    }
+
+    progressBox.style.display = "block";
+
+    progressBar.style.width = "10%";
+
+    progressText.innerHTML =
+    "Preparing PDF...";
+
+});
