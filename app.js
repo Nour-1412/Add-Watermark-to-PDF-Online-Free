@@ -184,7 +184,7 @@ const b = parseInt(hex.substring(5, 7), 16) / 255;
     for (const page of pages) {
 
      const { width, height } = page.getSize();
-     const { width, height } = page.getSize();
+     
 
 let posX = width * 0.15;
 let posY = height * 0.45;
