@@ -20,7 +20,9 @@ const progressBar = document.getElementById("progressBar");
 const progressText = document.getElementById("progressText");
 
 const result = document.getElementById("result");
-
+const watermarkStyle = document.getElementById("watermarkStyle");
+const watermarkSize = document.getElementById("watermarkSize");
+const watermarkColor = document.getElementById("watermarkColor");
 let selectedPDF = null;
 
 /* ==========================
@@ -157,6 +159,23 @@ watermarkBtn.addEventListener("click", async () => {
     progressText.innerHTML = "Adding watermark...";
 
     const text = document.getElementById("watermarkText").value || "CONFIDENTIAL";
+      let fontSize = 40;
+
+switch (watermarkSize.value) {
+
+    case "small":
+        fontSize = 28;
+        break;
+
+    case "medium":
+        fontSize = 40;
+        break;
+
+    case "large":
+        fontSize = 60;
+        break;
+
+}
 
     for (const page of pages) {
 
@@ -168,7 +187,7 @@ page.drawText(text, {
 
     y: height * 0.45,
 
-    size: Math.min(width, height) / 10,
+    size: fontSize,
 
     rotate: PDFLib.degrees(45),
 
