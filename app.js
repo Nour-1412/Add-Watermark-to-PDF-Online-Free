@@ -176,24 +176,103 @@ switch (watermarkSize.value) {
         break;
 
 }
+const hex = watermarkColor.value;
 
+const r = parseInt(hex.substring(1, 3), 16) / 255;
+const g = parseInt(hex.substring(3, 5), 16) / 255;
+const b = parseInt(hex.substring(5, 7), 16) / 255;
     for (const page of pages) {
 
      const { width, height } = page.getSize();
+          let posX = width * 0.15;
+let posY = height * 0.45;
+let angle = 45;
 
+switch (watermarkStyle.value) {
+
+    case "center":
+
+        posX = width / 2 - 120;
+        posY = height / 2;
+        angle = 0;
+
+        break;
+
+    case "diagonal":
+
+        posX = width * 0.15;
+        posY = height * 0.45;
+        angle = 45;
+
+        break;
+
+    case "full":
+
+        posX = width * 0.05;
+        posY = height / 2;
+        angle = 0;
+        fontSize = Math.min(width, height) / 6;
+
+        break;
+
+    case "repeat":
+
+        // سنبرمجه في الخطوة القادمة
+        break;
+
+}
+let posX = width * 0.15;
+let posY = height * 0.45;
+let angle = 45;
+
+switch (watermarkStyle.value) {
+
+    case "center":
+
+        posX = width * 0.30;
+        posY = height * 0.50;
+        angle = 0;
+
+        break;
+
+    case "diagonal":
+
+        posX = width * 0.15;
+        posY = height * 0.45;
+        angle = 45;
+
+        break;
+
+    case "full":
+
+        posX = width * 0.05;
+        posY = height * 0.50;
+        angle = 0;
+        fontSize = Math.min(width, height) / 6;
+
+        break;
+
+    case "repeat":
+
+        // سننفذها في الخطوة التالية
+        break;
+
+      }
 page.drawText(text, {
 
-    x: width * 0.15,
+    x: posX,
 
-    y: height * 0.45,
+    y: posY,
 
     size: fontSize,
 
-    rotate: PDFLib.degrees(45),
+    rotate: PDFLib.degrees(angle),
 
-    opacity: Number(opacity.value) / 100
+    opacity: Number(opacity.value) / 100,
 
-}); 
+    color: PDFLib.rgb(r, g, b)
+
+});
 
     }
 
