@@ -121,29 +121,7 @@ watermarkType.addEventListener("change", () => {
 
 });
 
-/* ==========================
-      Add Watermark Button
-========================== */
 
-watermarkBtn.addEventListener("click", () => {
-
-    if (!selectedPDF) {
-
-        result.innerHTML =
-        "⚠ Please upload a PDF first.";
-
-        return;
-
-    }
-
-    progressBox.style.display = "block";
-
-    progressBar.style.width = "10%";
-
-    progressText.innerHTML =
-    "Preparing PDF...";
-
-});
 /* ==========================
       PDF Engine
 ========================== */
@@ -171,7 +149,59 @@ watermarkBtn.addEventListener("click", async () => {
     progressText.innerHTML =
     "Preparing watermark...";
 
-    result.innerHTML =
-    "✅ PDF loaded successfully.";
+    progressBar.style.width = "60%";
+
+progressText.innerHTML =
+"Adding watermark...";
+
+const page = pages[0];
+
+page.drawText("CONFIDENTIAL", {
+
+    x: 150,
+
+    y: 400,
+
+    size: 40,
+
+    opacity: 0.3
+
+});
+
+progressBar.style.width = "80%";
+
+progressText.innerHTML =
+"Saving PDF...";
+
+const pdfBytes =
+    await pdfDoc.save();
+
+const blob = new Blob([pdfBytes], {
+
+    type: "application/pdf"
+
+});
+
+const url =
+    URL.createObjectURL(blob);
+
+progressBar.style.width = "100%";
+
+progressText.innerHTML =
+"Completed successfully.";
+
+result.innerHTML = `
+<a href="${url}"
+download="watermarked.pdf"
+style="
+display:inline-block;
+padding:12px 20px;
+background:#06b6d4;
+color:#fff;
+border-radius:10px;
+text-decoration:none;
+margin-top:15px;">
+⬇ Download Watermarked PDF
+</a>`;
 
 });
