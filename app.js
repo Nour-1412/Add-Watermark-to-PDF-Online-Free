@@ -214,7 +214,7 @@ font-weight:bold;">
 const opacity = document.getElementById("opacity");
 const opacityValue = document.getElementById("opacityValue");
 
-opacity.addEventListener("input", () => {
+opacity.addEventListener("change", () => {
 
     opacityValue.innerHTML = opacity.value + "%";
 
