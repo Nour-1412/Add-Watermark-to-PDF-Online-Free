@@ -184,43 +184,8 @@ const b = parseInt(hex.substring(5, 7), 16) / 255;
     for (const page of pages) {
 
      const { width, height } = page.getSize();
-          let posX = width * 0.15;
-let posY = height * 0.45;
-let angle = 45;
+     const { width, height } = page.getSize();
 
-switch (watermarkStyle.value) {
-
-    case "center":
-
-        posX = width / 2 - 120;
-        posY = height / 2;
-        angle = 0;
-
-        break;
-
-    case "diagonal":
-
-        posX = width * 0.15;
-        posY = height * 0.45;
-        angle = 45;
-
-        break;
-
-    case "full":
-
-        posX = width * 0.05;
-        posY = height / 2;
-        angle = 0;
-        fontSize = Math.min(width, height) / 6;
-
-        break;
-
-    case "repeat":
-
-        // سنبرمجه في الخطوة القادمة
-        break;
-
-}
 let posX = width * 0.15;
 let posY = height * 0.45;
 let angle = 45;
@@ -228,36 +193,29 @@ let angle = 45;
 switch (watermarkStyle.value) {
 
     case "center":
-
-        posX = width * 0.30;
-        posY = height * 0.50;
+        posX = width / 2 - 120;
+        posY = height / 2;
         angle = 0;
-
         break;
 
     case "diagonal":
-
         posX = width * 0.15;
         posY = height * 0.45;
         angle = 45;
-
         break;
 
     case "full":
-
         posX = width * 0.05;
-        posY = height * 0.50;
+        posY = height / 2;
         angle = 0;
         fontSize = Math.min(width, height) / 6;
-
         break;
 
     case "repeat":
-
-        // سننفذها في الخطوة التالية
         break;
 
-      }
+}     
+    
 page.drawText(text, {
 
     x: posX,
