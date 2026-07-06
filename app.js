@@ -127,7 +127,7 @@ watermarkType.addEventListener("change", () => {
 ========================== */
 
 watermarkBtn.addEventListener("click", async () => {
-
+alert("Button Works");
     if (!selectedPDF) return;
 
     progressBar.style.width = "20%";
