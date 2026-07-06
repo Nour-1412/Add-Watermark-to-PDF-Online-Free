@@ -127,80 +127,86 @@ watermarkType.addEventListener("change", () => {
 ========================== */
 
 watermarkBtn.addEventListener("click", async () => {
-alert("Button Works");
-    if (!selectedPDF) return;
+
+    if (!selectedPDF) {
+
+        result.innerHTML = "⚠ Please upload a PDF first.";
+
+        return;
+
+    }
+
+    progressBox.style.display = "block";
+
+    progressBar.style.width = "5%";
+
+    progressText.innerHTML = "Preparing...";
+
+    const bytes = await selectedPDF.arrayBuffer();
 
     progressBar.style.width = "20%";
 
-    progressText.innerHTML =
-    "Loading PDF...";
+    progressText.innerHTML = "Loading PDF...";
 
-    const bytes =
-        await selectedPDF.arrayBuffer();
+    const pdfDoc = await PDFLib.PDFDocument.load(bytes);
 
-    const pdfDoc =
-        await PDFLib.PDFDocument.load(bytes);
-
-    const pages =
-        pdfDoc.getPages();
+    const pages = pdfDoc.getPages();
 
     progressBar.style.width = "40%";
 
-    progressText.innerHTML =
-    "Preparing watermark...";
+    progressText.innerHTML = "Adding watermark...";
 
-    progressBar.style.width = "60%";
+    const text = document.getElementById("watermarkText").value || "CONFIDENTIAL";
 
-progressText.innerHTML =
-"Adding watermark...";
+    for (const page of pages) {
 
-const page = pages[0];
+        page.drawText(text, {
 
-page.drawText("CONFIDENTIAL", {
+            x: 150,
 
-    x: 150,
+            y: 400,
 
-    y: 400,
+            size: 40,
 
-    size: 40,
+            opacity: 0.3
 
-    opacity: 0.3
+        });
 
-});
+    }
 
-progressBar.style.width = "80%";
+    progressBar.style.width = "70%";
 
-progressText.innerHTML =
-"Saving PDF...";
+    progressText.innerHTML = "Saving PDF...";
 
-const pdfBytes =
-    await pdfDoc.save();
+    const pdfBytes = await pdfDoc.save();
 
-const blob = new Blob([pdfBytes], {
+    progressBar.style.width = "90%";
 
-    type: "application/pdf"
+    progressText.innerHTML = "Preparing download...";
 
-});
+    const blob = new Blob([pdfBytes], {
 
-const url =
-    URL.createObjectURL(blob);
+        type: "application/pdf"
 
-progressBar.style.width = "100%";
+    });
 
-progressText.innerHTML =
-"Completed successfully.";
+    const url = URL.createObjectURL(blob);
 
-result.innerHTML = `
-<a href="${url}"
-download="watermarked.pdf"
+    progressBar.style.width = "100%";
+
+    progressText.innerHTML = "Completed successfully.";
+
+    result.innerHTML = `
+<a href="${url}" download="watermarked.pdf"
 style="
 display:inline-block;
+margin-top:15px;
 padding:12px 20px;
 background:#06b6d4;
 color:#fff;
-border-radius:10px;
 text-decoration:none;
-margin-top:15px;">
+border-radius:10px;
+font-weight:bold;">
 ⬇ Download Watermarked PDF
 </a>`;
 
