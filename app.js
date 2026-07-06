@@ -168,7 +168,7 @@ watermarkBtn.addEventListener("click", async () => {
 
             size: 40,
 
-            opacity: 0.3
+            opacity: Number(opacity.value) / 100
 
         });
 
@@ -209,5 +209,13 @@ border-radius:10px;
 font-weight:bold;">
 ⬇ Download Watermarked PDF
 </a>`;
+
+});
+const opacity = document.getElementById("opacity");
+const opacityValue = document.getElementById("opacityValue");
+
+opacity.addEventListener("input", () => {
+
+    opacityValue.innerHTML = opacity.value + "%";
 
 });
