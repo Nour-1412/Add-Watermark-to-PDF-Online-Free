@@ -160,17 +160,21 @@ watermarkBtn.addEventListener("click", async () => {
 
     for (const page of pages) {
 
-        page.drawText(text, {
+     const { width, height } = page.getSize();
 
-            x: 150,
+page.drawText(text, {
 
-            y: 400,
+    x: width * 0.15,
 
-            size: 40,
+    y: height * 0.45,
 
-            opacity: Number(opacity.value) / 100
+    size: Math.min(width, height) / 10,
 
-        });
+    rotate: PDFLib.degrees(45),
+
+    opacity: Number(opacity.value) / 100
+
+}); 
 
     }
 
