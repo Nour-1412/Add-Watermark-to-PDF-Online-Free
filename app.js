@@ -23,6 +23,8 @@ const result = document.getElementById("result");
 const watermarkStyle = document.getElementById("watermarkStyle");
 const watermarkSize = document.getElementById("watermarkSize");
 const watermarkColor = document.getElementById("watermarkColor");
+const opacity = document.getElementById("opacity");
+const opacityValue = document.getElementById("opacityValue");
 let selectedPDF = null;
 
 /* ==========================
@@ -271,8 +273,7 @@ font-weight:bold;">
 </a>`;
 
 });
-const opacity = document.getElementById("opacity");
-const opacityValue = document.getElementById("opacityValue");
+
 
 opacity.addEventListener("change", () => {
 
