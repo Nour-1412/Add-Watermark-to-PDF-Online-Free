@@ -10,7 +10,11 @@ const watermarkType = document.getElementById("watermarkType");
 const textOptions = document.getElementById("textOptions");
 
 const imageOptions = document.getElementById("imageOptions");
+const watermarkImage = document.getElementById("watermarkImage");
 
+const imageSize = document.getElementById("imageSize");
+
+const imagePosition = document.getElementById("imagePosition");
 const watermarkBtn = document.getElementById("watermarkBtn");
 
 const progressBox = document.getElementById("progressBox");
@@ -161,6 +165,17 @@ watermarkBtn.addEventListener("click", async () => {
     progressText.innerHTML = "Adding watermark...";
 
     const text = document.getElementById("watermarkText").value || "CONFIDENTIAL";
+      let imageBytes = null;
+
+if (
+    watermarkType.value === "image" &&
+    watermarkImage.files.length
+) {
+
+    imageBytes =
+    await watermarkImage.files[0].arrayBuffer();
+
+}
       let fontSize = 40;
 
 switch (watermarkSize.value) {
@@ -217,8 +232,107 @@ switch (watermarkStyle.value) {
         break;
 
 }     
-    
-page.drawText(text, {
+ // ==========================
+// Image Watermark
+// ==========================
+
+if (
+    watermarkType.value === "image" &&
+    imageBytes
+) {
+
+    let image;
+
+    try {
+
+        image =
+        await pdfDoc.embedPng(imageBytes);
+
+    } catch {
+
+        image =
+        await pdfDoc.embedJpg(imageBytes);
+
+    }
+
+    let imgWidth = 120;
+    let imgHeight = 120;
+
+    switch (imageSize.value) {
+
+        case "small":
+            imgWidth = 80;
+            imgHeight = 80;
+            break;
+
+        case "medium":
+            imgWidth = 120;
+            imgHeight = 120;
+            break;
+
+        case "large":
+            imgWidth = 180;
+            imgHeight = 180;
+            break;
+
+    }
+
+    let imgX = width / 2 - imgWidth / 2;
+    let imgY = height / 2 - imgHeight / 2;
+
+    switch (imagePosition.value) {
+
+        case "top-left":
+            imgX = 30;
+            imgY = height - imgHeight - 30;
+            break;
+
+        case "top-right":
+            imgX = width - imgWidth - 30;
+            imgY = height - imgHeight - 30;
+            break;
+
+        case "bottom-left":
+            imgX = 30;
+            imgY = 30;
+            break;
+
+        case "bottom-right":
+            imgX = width - imgWidth - 30;
+            imgY = 30;
+            break;
+
+        case "center":
+            imgX = width / 2 - imgWidth / 2;
+            imgY = height / 2 - imgHeight / 2;
+            break;
+
+    }
+
+    page.drawImage(image, {
+
+        x: imgX,
+
+        y: imgY,
+
+        width: imgWidth,
+
+        height: imgHeight,
+
+        opacity: Number(opacity.value) / 100
+
+    });
+
+      }   
+if (watermarkType.value === "text") {
+
+    page.drawText(text, {
+
+        // نفس الكود الموجود عندك
+
+    });
+
+}
 
     x: posX,
 
