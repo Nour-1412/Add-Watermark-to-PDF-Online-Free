@@ -130,7 +130,7 @@ watermarkType.addEventListener("change", () => {
 });
 
 
-/* ==========================
+    /* ==========================
       PDF Engine
 ========================== */
 
@@ -164,40 +164,86 @@ watermarkBtn.addEventListener("click", async () => {
 
     progressText.innerHTML = "Adding watermark...";
 
-    const text = document.getElementById("watermarkText").value || "CONFIDENTIAL";
-      let imageBytes = null;
+    const text =
+    document.getElementById("watermarkText").value ||
+    "CONFIDENTIAL";
 
-if (
-    watermarkType.value === "image" &&
-    watermarkImage.files.length
-) {
+    let imageBytes = null;
 
-    imageBytes =
-    await watermarkImage.files[0].arrayBuffer();
+    if (
+        watermarkType.value === "image" &&
+        watermarkImage.files.length
+    ) {
 
-}
-      let fontSize = 40;
+        imageBytes =
+        await watermarkImage.files[0].arrayBuffer();
 
-switch (watermarkSize.value) {
+    }
 
-    case "small":
-        fontSize = 28;
-        break;
+    let fontSize = 40;
 
-    case "medium":
-        fontSize = 40;
-        break;
+    switch (watermarkSize.value) {
 
-    case "large":
-        fontSize = 60;
-        break;
+        case "small":
+            fontSize = 28;
+            break;
 
-}
-const hex = watermarkColor.value;
+        case "medium":
+            fontSize = 40;
+            break;
 
-const r = parseInt(hex.substring(1, 3), 16) / 255;
-const g = parseInt(hex.substring(3, 5), 16) / 255;
-const b = parseInt(hex.substring(5, 7), 16) / 255;
+        case "large":
+            fontSize = 60;
+            break;
+
+    }
+
+    const hex = watermarkColor.value;
+
+    const r = parseInt(hex.substring(1,3),16)/255;
+    const g = parseInt(hex.substring(3,5),16)/255;
+    const b = parseInt(hex.substring(5,7),16)/255;
+
+    for (const page of pages) {
+
+        const { width, height } = page.getSize();
+
+        let posX = width * 0.15;
+        let posY = height * 0.45;
+        let angle = 45;
+
+        switch (watermarkStyle.value) {
+
+            case "center":
+
+                posX = width / 2 - 120;
+                posY = height / 2;
+                angle = 0;
+
+                break;
+
+            case "diagonal":
+
+                posX = width * 0.15;
+                posY = height * 0.45;
+                angle = 45;
+
+                break;
+
+            case "full":
+
+                posX = width * 0.05;
+                posY = height / 2;
+                angle = 0;
+                fontSize = Math.min(width,height)/6;
+
+                break;
+
+            case "repeat":
+
+                break;
+
+        }
     for (const page of pages) {
 
      const { width, height } = page.getSize();
