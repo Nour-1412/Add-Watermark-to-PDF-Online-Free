@@ -397,3 +397,784 @@ function hideError(){
     uploadError.classList.add("hidden");
 
 }
+/* ==========================================
+   TEXT WATERMARK ELEMENTS
+========================================== */
+
+const watermarkTextInput =
+    document.getElementById("watermark-text");
+
+const fontFamilySelect =
+    document.getElementById("font-family");
+
+const fontSizeSlider =
+    document.getElementById("font-size");
+
+const fontColorPicker =
+    document.getElementById("font-color");
+
+const opacitySlider =
+    document.getElementById("opacity");
+
+const rotationSlider =
+    document.getElementById("rotation");
+
+const letterSpacingSlider =
+    document.getElementById("letter-spacing");
+
+const lineHeightSlider =
+    document.getElementById("line-height");
+watermarkTextInput?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.text =
+            event.target.value;
+
+        refreshPreview();
+
+    }
+);
+fontFamilySelect?.addEventListener(
+    "change",
+    (event) => {
+
+        appState.fontFamily =
+            event.target.value;
+
+        refreshPreview();
+
+    }
+);
+fontSizeSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.fontSize =
+            Number(event.target.value);
+
+        document.getElementById(
+            "font-size-value"
+        ).textContent =
+            `${appState.fontSize}px`;
+
+        refreshPreview();
+
+    }
+);
+
+fontColorPicker?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.fontColor =
+            event.target.value;
+
+        refreshPreview();
+
+    }
+);
+opacitySlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.opacity =
+            Number(event.target.value);
+
+        document.getElementById(
+            "opacity-value"
+        ).textContent =
+            `${appState.opacity}%`;
+
+        refreshPreview();
+
+    }
+);
+rotationSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.rotation =
+            Number(event.target.value);
+
+        document.getElementById(
+            "rotation-value"
+        ).textContent =
+            `${appState.rotation}°`;
+
+        refreshPreview();
+
+    }
+);
+letterSpacingSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.letterSpacing =
+            Number(event.target.value);
+
+        document.getElementById(
+            "letter-spacing-value"
+        ).textContent =
+            `${appState.letterSpacing}px`;
+
+        refreshPreview();
+
+    }
+);
+lineHeightSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.lineHeight =
+            Number(event.target.value);
+
+        document.getElementById(
+            "line-height-value"
+        ).textContent =
+            appState.lineHeight;
+
+        refreshPreview();
+
+    }
+);
+function refreshPreview(){
+
+    console.log(
+        "Preview Updated",
+        appState
+    );
+
+}
+const weightButtons =
+    document.querySelectorAll(
+        "[data-weight]"
+    );
+
+weightButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            weightButtons.forEach(
+                btn => btn.classList.remove("active")
+            );
+
+            button.classList.add("active");
+
+            appState.fontWeight =
+                button.dataset.weight;
+
+            refreshPreview();
+
+        }
+    );
+
+});
+const styleButtons =
+    document.querySelectorAll(
+        ".style-btn"
+    );
+
+styleButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            button.classList.toggle("active");
+
+            const style =
+                button.dataset.style;
+
+            if(style === "italic"){
+
+                appState.italic =
+                    button.classList.contains(
+                        "active"
+                    );
+
+            }
+
+            if(style === "underline"){
+
+                appState.underline =
+                    button.classList.contains(
+                        "active"
+                    );
+
+            }
+
+            refreshPreview();
+
+        }
+    );
+
+});
+const alignmentButtons =
+    document.querySelectorAll(
+        "[data-align]"
+    );
+
+alignmentButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            alignmentButtons.forEach(
+                btn => btn.classList.remove("active")
+            );
+
+            button.classList.add("active");
+
+            appState.alignment =
+                button.dataset.align;
+
+            refreshPreview();
+
+        }
+    );
+
+});
+/* ==========================================
+   IMAGE WATERMARK ELEMENTS
+========================================== */
+
+const imageInput =
+    document.getElementById("image-input");
+
+const chooseImageBtn =
+    document.getElementById(
+        "choose-image-btn"
+    );
+
+const replaceImageBtn =
+    document.getElementById(
+        "replace-image-btn"
+    );
+
+const removeImageBtn =
+    document.getElementById(
+        "remove-image-btn"
+    );
+
+const previewImage =
+    document.getElementById(
+        "preview-image"
+    );
+
+const imagePreview =
+    document.getElementById(
+        "image-preview"
+    );
+chooseImageBtn?.addEventListener(
+    "click",
+    () => {
+
+        imageInput.click();
+
+    }
+);
+
+
+replaceImageBtn?.addEventListener(
+    "click",
+    () => {
+
+        imageInput.click();
+
+    }
+);
+imageInput?.addEventListener(
+    "change",
+    (event) => {
+
+        const file =
+            event.target.files[0];
+
+        if(!file) return;
+
+        loadWatermarkImage(file);
+
+    }
+);
+function loadWatermarkImage(file){
+
+    appState.imageFile = file;
+
+    const reader =
+        new FileReader();
+
+    reader.onload = function(e){
+
+        previewImage.src =
+            e.target.result;
+
+        imagePreview.classList.remove(
+            "hidden"
+        );
+
+        refreshPreview();
+
+    };
+
+    reader.readAsDataURL(file);
+
+}
+removeImageBtn?.addEventListener(
+    "click",
+    () => {
+
+        appState.imageFile = null;
+
+        previewImage.src = "";
+
+        imagePreview.classList.add(
+            "hidden"
+        );
+
+        refreshPreview();
+
+    }
+);
+/* ==========================================
+   IMAGE CONTROLS
+========================================== */
+
+const imageScaleSlider =
+    document.getElementById(
+        "image-scale"
+    );
+
+const imageOpacitySlider =
+    document.getElementById(
+        "image-opacity"
+    );
+
+const imageRotationSlider =
+    document.getElementById(
+        "image-rotation"
+    );
+
+const flipHorizontalBtn =
+    document.getElementById(
+        "flip-horizontal-btn"
+    );
+
+const flipVerticalBtn =
+    document.getElementById(
+        "flip-vertical-btn"
+    );
+imageScaleSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.imageScale =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+imageOpacitySlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.imageOpacity =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+imageRotationSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.imageRotation =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+flipHorizontalBtn?.addEventListener(
+    "click",
+    () => {
+
+        appState.flipHorizontal =
+            !appState.flipHorizontal;
+
+        refreshPreview();
+
+    }
+);
+flipVerticalBtn?.addEventListener(
+    "click",
+    () => {
+
+        appState.flipVertical =
+            !appState.flipVertical;
+
+        refreshPreview();
+
+    }
+);
+/* ==========================================
+   POSITION ENGINE
+========================================== */
+
+const positionButtons =
+    document.querySelectorAll(
+        ".position-btn"
+    );
+
+const customXGroup =
+    document.getElementById(
+        "custom-x-group"
+    );
+
+const customYGroup =
+    document.getElementById(
+        "custom-y-group"
+    );
+
+const repeatSpacingXGroup =
+    document.getElementById(
+        "repeat-spacing-x-group"
+    );
+
+const repeatSpacingYGroup =
+    document.getElementById(
+        "repeat-spacing-y-group"
+    );
+positionButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            positionButtons.forEach(
+                btn => btn.classList.remove(
+                    "active"
+                )
+            );
+
+            button.classList.add(
+                "active"
+            );
+
+            appState.position =
+                button.dataset.position;
+
+            updatePositionUI();
+
+            refreshPreview();
+
+        }
+    );
+
+});
+function updatePositionUI(){
+
+    customXGroup?.classList.add(
+        "hidden"
+    );
+
+    customYGroup?.classList.add(
+        "hidden"
+    );
+
+    repeatSpacingXGroup?.classList.add(
+        "hidden"
+    );
+
+    repeatSpacingYGroup?.classList.add(
+        "hidden"
+    );
+
+    if(
+        appState.position ===
+        "custom"
+    ){
+
+        customXGroup?.classList.remove(
+            "hidden"
+        );
+
+        customYGroup?.classList.remove(
+            "hidden"
+        );
+
+    }
+
+    if(
+        appState.position ===
+        "repeat"
+    ){
+
+        repeatSpacingXGroup?.classList.remove(
+            "hidden"
+        );
+
+        repeatSpacingYGroup?.classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
+/* ==========================================
+   POSITION SLIDERS ENGINE
+========================================== */
+
+const customXSlider =
+    document.getElementById(
+        "custom-x"
+    );
+
+const customYSlider =
+    document.getElementById(
+        "custom-y"
+    );
+
+const horizontalMarginSlider =
+    document.getElementById(
+        "horizontal-margin"
+    );
+
+const verticalMarginSlider =
+    document.getElementById(
+        "
+       customXSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.customX =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+customYSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.customY =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+horizontalMarginSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.horizontalMargin =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+verticalMarginSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.verticalMargin =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+repeatSpacingXSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.repeatSpacingX =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+repeatSpacingYSlider?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.repeatSpacingY =
+            Number(event.target.value);
+
+        refreshPreview();
+
+    }
+);
+/* ==========================================
+   PAGE SETTINGS ENGINE
+========================================== */
+
+const pageButtons =
+    document.querySelectorAll(
+        ".page-btn"
+    );
+pageButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            pageButtons.forEach(
+                btn => btn.classList.remove(
+                    "active"
+                )
+            );
+
+            button.classList.add(
+                "active"
+            );
+
+            appState.pageMode =
+                button.dataset.pages;
+
+            updatePageUI();
+
+            refreshPreview
+           function updatePageUI(){
+
+    customPagesGroup?.classList.add(
+        "hidden"
+    );
+
+    if(
+        appState.pageMode ===
+        "custom"
+    ){
+
+        customPagesGroup?.classList.remove(
+            "hidden"
+        );
+
+    }
+
+           }
+           customPagesInput?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.customPages =
+            event.target.value;
+
+        refreshPreview();
+
+    }
+);
+           excludedPagesInput?.addEventListener(
+    "input",
+    (event) => {
+
+        appState.excludedPages =
+            event.target.value;
+
+        refreshPreview();
+
+    }
+);
+           /* ==========================================
+   WATERMARK TYPE ENGINE
+========================================== */
+
+const watermarkTypeButtons =
+    document.querySelectorAll(
+        ".watermark-card"
+    );
+
+const textSettingsPanel =
+    document.getElementById(
+        "text-settings-panel"
+    );
+
+const imageSettingsPanel =
+    document.getElementById(
+        "image-settings-panel"
+    );
+           watermarkTypeButtons.forEach(card => {
+
+    card.addEventListener(
+        "click",
+        () => {
+
+            watermarkTypeButtons.forEach(
+                item => item.classList.remove(
+                    "active"
+                )
+            );
+
+            card.classList.add(
+                "active"
+            );
+
+            appState.watermarkType =
+                card.dataset.type;
+
+            updateWatermarkPanels();
+
+            refreshPreview();
+
+        }
+    );
+
+});
+           function updateWatermarkPanels(){
+
+    textSettingsPanel?.classList.add(
+        "hidden"
+    );
+
+    imageSettingsPanel?.classList.add(
+        "hidden"
+    );
+
+    if(
+        appState.watermarkType ===
+        "text"
+    ){
+
+        textSettingsPanel?.classList.remove(
+            "hidden"
+        );
+
+    }
+
+    if(
+        appState.watermarkType ===
+        "image"
+    ){
+
+        imageSettingsPanel?.classList.remove(
+            "hidden"
+        );
+
+    }
+
+    if(
+        appState.watermarkType ===
+        "mixed"
+    ){
+
+        textSettingsPanel?.classList.remove(
+            "hidden"
+        );
+
+        imageSettingsPanel?.classList.remove(
+            "hidden"
+        );
+
+    }
+
+           }
+           updateWatermarkPanels();
