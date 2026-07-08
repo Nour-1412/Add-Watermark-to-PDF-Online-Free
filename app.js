@@ -1,442 +1,399 @@
-const pdfInput = document.getElementById("pdfInput");
-const uploadBtn = document.getElementById("uploadBtn");
+/* ==========================================
+   WEBBAG PDF WATERMARK STATE
+========================================== */
 
-const dropZone = document.getElementById("dropZone");
+const appState = {
 
-const fileName = document.getElementById("fileName");
+    /* -------------------------
+       PDF
+    ------------------------- */
 
-const watermarkType = document.getElementById("watermarkType");
+    pdfFile: null,
 
-const textOptions = document.getElementById("textOptions");
+    pdfName: "",
 
-const imageOptions = document.getElementById("imageOptions");
-const watermarkImage = document.getElementById("watermarkImage");
+    pdfSize: 0,
 
-const imageSize = document.getElementById("imageSize");
+    totalPages: 0,
 
-const imagePosition = document.getElementById("imagePosition");
-const watermarkBtn = document.getElementById("watermarkBtn");
 
-const progressBox = document.getElementById("progressBox");
+    /* -------------------------
+       Watermark Type
+    ------------------------- */
 
-const progressBar = document.getElementById("progressBar");
+    watermarkType: "text",
 
-const progressText = document.getElementById("progressText");
 
-const result = document.getElementById("result");
-const watermarkStyle = document.getElementById("watermarkStyle");
-const watermarkSize = document.getElementById("watermarkSize");
-const watermarkColor = document.getElementById("watermarkColor");
-const opacity = document.getElementById("opacity");
-const opacityValue = document.getElementById("opacityValue");
-let selectedPDF = null;
+    /* -------------------------
+       Text Watermark
+    ------------------------- */
 
-/* ==========================
-      Upload Button
-========================== */
+    text: "",
 
-uploadBtn.addEventListener("click", () => {
+    fontFamily: "Arial",
+
+    fontSize: 36,
+
+    fontColor: "#999999",
+
+    opacity: 35,
+
+    rotation: -45,
+
+    fontWeight: "normal",
+
+    italic: false,
+
+    underline: false,
+
+    letterSpacing: 0,
+
+    lineHeight: 1.2,
+
+    alignment: "center",
+
+
+    /* -------------------------
+       Image Watermark
+    ------------------------- */
+
+    imageFile: null,
+
+    imageScale: 100,
+
+    imageOpacity: 35,
+
+    imageRotation: -45,
+
+    flipHorizontal: false,
+
+    flipVertical: false,
+
+
+    /* -------------------------
+       Position
+    ------------------------- */
+
+    position: "center",
+
+    customX: 50,
+
+    customY: 50,
+
+    horizontalMargin: 20,
+
+    verticalMargin: 20,
+
+    repeatSpacingX: 120,
+
+    repeatSpacingY: 120,
+
+
+    /* -------------------------
+       Pages
+    ------------------------- */
+
+    pageMode: "all",
+
+    customPages: "",
+
+    excludedPages: "",
+
+
+    /* -------------------------
+       Preview
+    ------------------------- */
+
+    currentPreviewPage: 1,
+
+    zoomLevel: 100,
+
+
+    /* -------------------------
+       Export
+    ------------------------- */
+
+    outputFileName: "watermarked-document.pdf",
+
+    outputQuality: "original",
+
+    flattenWatermark: true,
+
+    compressOutput: false,
+
+
+    /* -------------------------
+       UI
+    ------------------------- */
+
+    currentStep: 1,
+
+    darkMode: false
+
+};
+/* ==========================================
+   WIZARD NAVIGATION
+========================================== */
+
+const sections = document.querySelectorAll(".tool-section");
+const steps = document.querySelectorAll(".step");
+
+
+function goToStep(stepNumber) {
+
+    appState.currentStep = stepNumber;
+
+    updateSections();
+
+    updateWizardSteps();
+
+}
+
+
+function updateSections() {
+
+    sections.forEach(section => {
+        section.classList.remove("active-section");
+    });
+
+    switch(appState.currentStep) {
+
+        case 1:
+            document
+                .getElementById("upload-section")
+                .classList
+                .add("active-section");
+            break;
+
+        case 2:
+            document
+                .getElementById("watermark-section")
+                .classList
+                .add("active-section");
+            break;
+
+        case 3:
+            document
+                .getElementById("preview-section")
+                .classList
+                .add("active-section");
+            break;
+
+        case 4:
+            document
+                .getElementById("export-section")
+                .classList
+                .add("active-section");
+            break;
+    }
+
+}
+
+
+function updateWizardSteps() {
+
+    steps.forEach((step, index) => {
+
+        step.classList.remove("active");
+
+        if(index + 1 <= appState.currentStep) {
+
+            step.classList.add("active");
+
+        }
+
+    });
+
+      }
+/* ==========================================
+   NAVIGATION BUTTONS
+========================================== */
+
+document
+    .getElementById("go-to-watermark-btn")
+    ?.addEventListener("click", () => {
+
+        goToStep(2);
+
+});
+
+
+document
+    .getElementById("continue-to-preview-btn")
+    ?.addEventListener("click", () => {
+
+        goToStep(3);
+
+});
+
+
+document
+    .getElementById("continue-to-export-btn")
+    ?.addEventListener("click", () => {
+
+        goToStep(4);
+
+});
+
+
+document
+    .getElementById("back-to-upload-btn")
+    ?.addEventListener("click", () => {
+
+        goToStep(1);
+
+});
+
+
+document
+    .getElementById("back-to-settings-btn")
+    ?.addEventListener("click", () => {
+
+        goToStep(2);
+
+});
+
+
+document
+    .getElementById("back-to-preview-btn")
+    ?.addEventListener("click", () => {
+
+        goToStep(3);
+
+});
+const pdfInput = document.getElementById("pdf-input");
+const chooseFileBtn = document.getElementById("choose-file-btn");
+const dropZone = document.getElementById("drop-zone");
+
+const fileInfo = document.getElementById("file-info");
+
+const fileNameElement = document.getElementById("file-name");
+const fileSizeElement = document.getElementById("file-size");
+const pageCountElement = document.getElementById("page-count");
+
+const uploadError = document.getElementById("upload-error");
+chooseFileBtn.addEventListener("click", () => {
 
     pdfInput.click();
 
 });
+pdfInput.addEventListener("change", async (event) => {
 
-/* ==========================
-      File Upload
-========================== */
+    const file = event.target.files[0];
 
-pdfInput.addEventListener("change", (e) => {
+    if(file){
 
-    if (!e.target.files.length) return;
-
-    loadPDF(e.target.files[0]);
-
-});
-
-/* ==========================
-      Load PDF
-========================== */
-
-function loadPDF(file){
-
-    if(file.type !== "application/pdf"){
-
-        result.innerHTML =
-        "⚠ Please select a valid PDF file.";
-
-        return;
+        await loadPDF(file);
 
     }
 
-    selectedPDF = file;
+});
+dropZone.addEventListener("dragover", (event) => {
 
-    fileName.innerHTML =
-    "📄 " + file.name;
+    event.preventDefault();
 
-    result.innerHTML =
-    "✅ PDF loaded successfully.";
-
-}
-/* ==========================
-      Drag & Drop
-========================== */
-
-dropZone.addEventListener("dragover", (e) => {
-
-    e.preventDefault();
-
-    dropZone.classList.add("dragover");
+    dropZone.classList.add("drag-active");
 
 });
+
 
 dropZone.addEventListener("dragleave", () => {
 
-    dropZone.classList.remove("dragover");
+    dropZone.classList.remove("drag-active");
 
 });
 
-dropZone.addEventListener("drop", (e) => {
 
-    e.preventDefault();
+dropZone.addEventListener("drop", async (event) => {
 
-    dropZone.classList.remove("dragover");
+    event.preventDefault();
 
-    if (!e.dataTransfer.files.length) return;
+    dropZone.classList.remove("drag-active");
 
-    loadPDF(e.dataTransfer.files[0]);
+    const file = event.dataTransfer.files[0];
 
-});
+    if(file){
 
-/* ==========================
-      Watermark Type
-========================== */
-
-watermarkType.addEventListener("change", () => {
-
-    if (watermarkType.value === "text") {
-
-        textOptions.style.display = "block";
-
-        imageOptions.style.display = "none";
-
-    } else {
-
-        textOptions.style.display = "none";
-
-        imageOptions.style.display = "block";
+        await loadPDF(file);
 
     }
 
 });
+async function loadPDF(file){
 
+    if(file.type !== "application/pdf"){
 
-    /* ==========================
-      PDF Engine
-========================== */
-
-watermarkBtn.addEventListener("click", async () => {
-
-    if (!selectedPDF) {
-
-        result.innerHTML = "⚠ Please upload a PDF first.";
+        showError(
+            "Please upload a valid PDF file."
+        );
 
         return;
-
     }
 
-    progressBox.style.display = "block";
+    hideError();
 
-    progressBar.style.width = "5%";
+    appState.pdfFile = file;
 
-    progressText.innerHTML = "Preparing...";
+    appState.pdfName = file.name;
 
-    const bytes = await selectedPDF.arrayBuffer();
+    appState.pdfSize = file.size;
 
-    progressBar.style.width = "20%";
+    await extractPDFInformation(file);
 
-    progressText.innerHTML = "Loading PDF...";
+    updateFileCard();
 
-    const pdfDoc = await PDFLib.PDFDocument.load(bytes);
+              }
+async function extractPDFInformation(file){
 
-    const pages = pdfDoc.getPages();
+    const arrayBuffer = await file.arrayBuffer();
 
-    progressBar.style.width = "40%";
+    const pdf = await pdfjsLib.getDocument(
+        arrayBuffer
+    ).promise;
 
-    progressText.innerHTML = "Adding watermark...";
+    appState.totalPages = pdf.numPages;
 
-    const text =
-    document.getElementById("watermarkText").value ||
-    "CONFIDENTIAL";
+}
+function updateFileCard(){
 
-    let imageBytes = null;
+    fileNameElement.textContent =
+        appState.pdfName;
 
-    if (
-        watermarkType.value === "image" &&
-        watermarkImage.files.length
-    ) {
+    fileSizeElement.textContent =
+        formatFileSize(
+            appState.pdfSize
+        );
 
-        imageBytes =
-        await watermarkImage.files[0].arrayBuffer();
+    pageCountElement.textContent =
+        `${appState.totalPages} Pages`;
 
-    }
+    fileInfo.classList.remove("hidden");
 
-    let fontSize = 40;
+    document
+        .getElementById(
+            "go-to-watermark-btn"
+        )
+        .disabled = false;
 
-    switch (watermarkSize.value) {
+}
+function formatFileSize(bytes){
 
-        case "small":
-            fontSize = 28;
-            break;
+    return (
+        bytes / 1024 / 1024
+    ).toFixed(2) + " MB";
 
-        case "medium":
-            fontSize = 40;
-            break;
+}
+function showError(message){
 
-        case "large":
-            fontSize = 60;
-            break;
+    uploadError.textContent = message;
 
-    }
-
-    const hex = watermarkColor.value;
-
-    const r = parseInt(hex.substring(1,3),16)/255;
-    const g = parseInt(hex.substring(3,5),16)/255;
-    const b = parseInt(hex.substring(5,7),16)/255;
-
-    for (const page of pages) {
-
-        const { width, height } = page.getSize();
-
-        let posX = width * 0.15;
-        let posY = height * 0.45;
-        let angle = 45;
-
-        switch (watermarkStyle.value) {
-
-            case "center":
-
-                posX = width / 2 - 120;
-                posY = height / 2;
-                angle = 0;
-
-                break;
-
-            case "diagonal":
-
-                posX = width * 0.15;
-                posY = height * 0.45;
-                angle = 45;
-
-                break;
-
-            case "full":
-
-                posX = width * 0.05;
-                posY = height / 2;
-                angle = 0;
-                fontSize = Math.min(width,height)/6;
-
-                break;
-
-            case "repeat":
-
-                break;
-
-        }
-    for (const page of pages) {
-
-     const { width, height } = page.getSize();
-     
-
-let posX = width * 0.15;
-let posY = height * 0.45;
-let angle = 45;
-
-switch (watermarkStyle.value) {
-
-    case "center":
-        posX = width / 2 - 120;
-        posY = height / 2;
-        angle = 0;
-        break;
-
-    case "diagonal":
-        posX = width * 0.15;
-        posY = height * 0.45;
-        angle = 45;
-        break;
-
-    case "full":
-        posX = width * 0.05;
-        posY = height / 2;
-        angle = 0;
-        fontSize = Math.min(width, height) / 6;
-        break;
-
-    case "repeat":
-        break;
-
-}     
- // ==========================
-// Image Watermark
-// ==========================
-
-if (
-    watermarkType.value === "image" &&
-    imageBytes
-) {
-
-    let image;
-
-    try {
-
-        image =
-        await pdfDoc.embedPng(imageBytes);
-
-    } catch {
-
-        image =
-        await pdfDoc.embedJpg(imageBytes);
-
-    }
-
-    let imgWidth = 120;
-    let imgHeight = 120;
-
-    switch (imageSize.value) {
-
-        case "small":
-            imgWidth = 80;
-            imgHeight = 80;
-            break;
-
-        case "medium":
-            imgWidth = 120;
-            imgHeight = 120;
-            break;
-
-        case "large":
-            imgWidth = 180;
-            imgHeight = 180;
-            break;
-
-    }
-
-    let imgX = width / 2 - imgWidth / 2;
-    let imgY = height / 2 - imgHeight / 2;
-
-    switch (imagePosition.value) {
-
-        case "top-left":
-            imgX = 30;
-            imgY = height - imgHeight - 30;
-            break;
-
-        case "top-right":
-            imgX = width - imgWidth - 30;
-            imgY = height - imgHeight - 30;
-            break;
-
-        case "bottom-left":
-            imgX = 30;
-            imgY = 30;
-            break;
-
-        case "bottom-right":
-            imgX = width - imgWidth - 30;
-            imgY = 30;
-            break;
-
-        case "center":
-            imgX = width / 2 - imgWidth / 2;
-            imgY = height / 2 - imgHeight / 2;
-            break;
-
-    }
-
-    page.drawImage(image, {
-
-        x: imgX,
-
-        y: imgY,
-
-        width: imgWidth,
-
-        height: imgHeight,
-
-        opacity: Number(opacity.value) / 100
-
-    });
-
-      }   
-if (watermarkType.value === "text") {
-
-    page.drawText(text, {
-
-        // نفس الكود الموجود عندك
-
-    });
+    uploadError.classList.remove("hidden");
 
 }
 
-    x: posX,
 
-    y: posY,
+function hideError(){
 
-    size: fontSize,
+    uploadError.classList.add("hidden");
 
-    rotate: PDFLib.degrees(angle),
-
-    opacity: Number(opacity.value) / 100,
-
-    color: PDFLib.rgb(r, g, b)
-
-});
-
-    }
-
-    progressBar.style.width = "70%";
-
-    progressText.innerHTML = "Saving PDF...";
-
-    const pdfBytes = await pdfDoc.save();
-
-    progressBar.style.width = "90%";
-
-    progressText.innerHTML = "Preparing download...";
-
-    const blob = new Blob([pdfBytes], {
-
-        type: "application/pdf"
-
-    });
-
-    const url = URL.createObjectURL(blob);
-
-    progressBar.style.width = "100%";
-
-    progressText.innerHTML = "Completed successfully.";
-
-    result.innerHTML = `
-<a href="${url}" download="watermarked.pdf"
-style="
-display:inline-block;
-margin-top:15px;
-padding:12px 20px;
-background:#06b6d4;
-color:#fff;
-text-decoration:none;
-border-radius:10px;
-font-weight:bold;">
-⬇ Download Watermarked PDF
-</a>`;
-
-});
-
-
-opacity.addEventListener("change", () => {
-
-    opacityValue.innerHTML = opacity.value + "%";
-
-});
+}
