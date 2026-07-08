@@ -350,6 +350,7 @@ async function extractPDFInformation(file){
     const pdf = await pdfjsLib.getDocument(
         arrayBuffer
     ).promise;
+   loadedPdf = pdf;
 
     appState.totalPages = pdf.numPages;
 
@@ -1178,3 +1179,332 @@ const imageSettingsPanel =
 
            }
            updateWatermarkPanels();
+           /* ==========================================
+   PREVIEW ENGINE
+========================================== */
+
+const previewType =
+    document.getElementById(
+        "summary-type"
+    );
+
+const previewPosition =
+    document.getElementById(
+        "summary-position"
+    );
+
+const previewPages =
+    document.getElementById(
+        "summary-pages"
+    );
+
+const previewOpacity =
+    document.getElementById(
+        "summary-opacity"
+    );
+           function refreshPreview(){
+
+    updatePreviewSummary();
+
+    console.log(
+        "Preview refreshed",
+        appState
+    );
+
+       }
+          function updatePreviewSummary(){
+
+    previewType.textContent =
+        appState.watermarkType;
+
+    previewPosition.textContent =
+        appState.position;
+
+    previewPages.textContent =
+        appState.pageMode;
+
+    previewOpacity.textContent =
+        `${appState.opacity}%`;
+
+       }
+           updatePreviewSummary();
+           /* ==========================================
+   PDF CANVAS RENDERING
+========================================== */
+
+const previewCanvas =
+    document.getElementById(
+        "pdf-preview-canvas"
+    );
+
+const previewContext =
+    previewCanvas.getContext("2d");
+
+let loadedPdf = null;
+  async function renderPreviewPage(pageNumber = 1)         
+  {
+
+    if(!loadedPdf) return;
+
+    const page =
+        await loadedPdf.getPage(
+            pageNumber
+        );
+
+    const scale =
+        appState.zoomLevel / 100;
+
+    const viewport =
+        page.getViewport({
+            scale
+        });
+
+    previewCanvas.width =
+        viewport.width;
+
+    previewCanvas.height =
+        viewport.height;
+
+    await page.render({
+
+        canvasContext:
+            previewContext,
+
+        viewport
+
+    }).promise;
+
+    drawWatermarkOverlay();
+
+       }
+         function getWatermarkPosition(){
+
+    let x =
+        previewCanvas.width / 2;
+
+    let y =
+        previewCanvas.height / 2;
+
+    switch(appState.position){
+
+        case "top-left":
+            x = 120;
+            y = 100;
+            break;
+
+        case "top-right":
+            x =
+                previewCanvas.width - 120;
+            y = 100;
+            break;
+
+        case "bottom-left":
+            x = 120;
+            y =
+                previewCanvas.height - 100;
+            break;
+
+        case "bottom-right":
+            x =
+                previewCanvas.width - 120;
+
+            y =
+                previewCanvas.height - 100;
+            break;
+
+        case "header":
+            x =
+                previewCanvas.width / 2;
+
+            y = 80;
+            break;
+
+        case "footer":
+            x =
+                previewCanvas.width / 2;
+
+            y =
+                previewCanvas.height - 80;
+            break;
+
+        case "custom":
+            x =
+                (
+                    appState.customX / 100
+                ) *
+                previewCanvas.width;
+
+            y =
+                (
+                    appState.customY / 100
+                ) *
+                previewCanvas.height;
+
+            break;
+
+    }
+
+    return {x,y};
+
+         }  
+      function drawWatermarkOverlay(){
+
+    if(
+    appState.watermarkType ===
+    "text"
+){
+
+    drawTextWatermark();
+
+}
+
+if(
+    appState.watermarkType ===
+    "image"
+){
+
+    drawImageWatermark();
+
+}
+
+if(
+    appState.watermarkType ===
+    "mixed"
+){
+
+    drawTextWatermark();
+
+    drawImageWatermark();
+
+}
+
+    if(
+        !appState.text
+    ) return;
+
+    previewContext.save();
+
+    previewContext.globalAlpha =
+        appState.opacity / 100;
+
+    previewContext.fillStyle =
+        appState.fontColor;
+
+    previewContext.font =
+        `${appState.fontWeight}
+        ${appState.fontSize}px
+        ${appState.fontFamily}`;
+
+    previewContext.textAlign =
+        "center";
+
+    const position =
+    getWatermarkPosition();
+
+previewContext.translate(
+    position.x,
+    position.y
+);
+
+    previewContext.rotate(
+        appState.rotation *
+        Math.PI / 180
+    );
+
+    previewContext.fillText(
+        appState.text,
+        0,
+        0
+    );
+
+    previewContext.restore();
+
+      }
+           function drawImageWatermark(){
+
+    if(
+        !appState.imageFile
+    ) return;
+
+    const image =
+        new Image();
+
+    image.onload = () => {
+
+        previewContext.save();
+
+        previewContext.globalAlpha =
+            appState.imageOpacity / 100;
+
+        const position =
+            getWatermarkPosition();
+
+        previewContext.translate(
+            position.x,
+            position.y
+        );
+
+        previewContext.rotate(
+            appState.imageRotation *
+            Math.PI / 180
+        );
+
+        const scale =
+            appState.imageScale / 100;
+
+        const width =
+            image.width * scale;
+
+        const height =
+            image.height * scale;
+
+        previewContext.drawImage(
+
+            image,
+
+            -width / 2,
+            -height / 2,
+
+            width,
+            height
+
+        );
+
+        previewContext.restore();
+
+    };
+
+    image.src =
+        previewImage.src;
+
+           }
+           /* ==========================================
+   EXPORT ENGINE
+========================================== */
+
+const exportButton =
+    document.getElementById(
+        "export-btn"
+    );
+        exportButton?.addEventListener(
+    "click",
+    async () => {
+
+        await exportPDF();
+
+    }
+);
+           async function exportPDF(){
+
+    if(
+        !appState.pdfFile
+    ) return;
+
+    alert(
+        "Export Engine will be connected in the next step."
+    );
+
+           }
+           
+           
+           
