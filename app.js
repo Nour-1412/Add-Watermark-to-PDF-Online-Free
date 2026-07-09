@@ -1481,19 +1481,6 @@ previewContext.translate(
            /* ==========================================
    EXPORT ENGINE
 ========================================== */
-
-const exportButton =
-    document.getElementById(
-        "export-btn"
-    );
-        exportButton?.addEventListener(
-    "click",
-    async () => {
-
-        await exportPDF();
-
-    }
-);
            async function exportPDF(){
 
     if(
@@ -1519,16 +1506,18 @@ const exportButton =
         i < totalPages;
         i++
     ){
-const pageNumber =
-    i + 1;
 
-if(
-    !shouldProcessPage(
-        pageNumber
-    )
-){
-    continue;
-       }
+        const pageNumber =
+            i + 1;
+
+        if(
+            !shouldProcessPage(
+                pageNumber
+            )
+        ){
+            continue;
+        }
+
         const page =
             pages[i];
 
@@ -1538,16 +1527,102 @@ if(
         const pageHeight =
             page.getHeight();
 
-        console.log(
-            `Processing page ${
-                i + 1
-            }`
-        );
+        if(
+            appState.watermarkType ===
+            "text"
+        ){
+
+            await exportTextWatermark(
+                page,
+                pageWidth,
+                pageHeight
+            );
+
+        }
+
+        if(
+            appState.watermarkType ===
+            "image"
+        ){
+
+            await exportImageWatermark(
+                pdfDocument,
+                page,
+                pageWidth,
+                pageHeight
+            );
+
+        }
+
+        if(
+            appState.watermarkType ===
+            "mixed"
+        ){
+
+            await exportTextWatermark(
+                page,
+                pageWidth,
+                pageHeight
+            );
+
+            await exportImageWatermark(
+                pdfDocument,
+                page,
+                pageWidth,
+                pageHeight
+            );
+
+        }
 
     }
 
-           }
-           function shouldProcessPage(
+    const pdfBytes =
+        await pdfDocument.save();
+
+    const blob =
+        new Blob(
+            [pdfBytes],
+            {
+                type:
+                    "application/pdf"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+    link.href =
+        url;
+
+    link.download =
+        "watermarked.pdf";
+
+    document.body.appendChild(
+        link
+    );
+
+    link.click();
+
+    document.body.removeChild(
+        link
+    );
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+
+function shouldProcessPage(
     pageNumber
 ){
 
@@ -1577,277 +1652,13 @@ if(
                 pageNumber % 2 === 0
             );
 
-        case "custom":
-
-            const customPages =
-                appState.customPages
-                .split(",")
-
-                .map(
-                    p => Number(
-                        p.trim()
-                    )
-                );
-
-            return customPages.includes(
-                pageNumber
-            );
-
         default:
             return true;
 
     }
-async function exportTextWatermark(
-    page,
-    pageWidth,
-    pageHeight
-){
 
-    if(
-        !appState.text
-    ) return;
-
-    const {
-        rgb,
-        degrees
-    } = PDFLib;
-
-    page.drawText(
-
-        appState.text,
-
-        {
-
-            x:
-                pageWidth / 2,
-
-            y:
-                pageHeight / 2,
-
-            size:
-                appState.fontSize,
-
-            rotate:
-                degrees(
-                    appState.rotation
-                ),
-
-            opacity:
-                appState.opacity / 100,
-
-            color:
-                rgb(
-                    0.5,
-                    0.5,
-                    0.5
-                )
-
-        }
-
-    );
-
-}
-      async function exportImageWatermark(
-    page,
-    pageWidth,
-    pageHeight
-){
-
-    if(
-        !appState.imageFile
-    ) return;
-
-    const imageBytes =
-        await appState.imageFile.arrayBuffer();
-
-    let embeddedImage;
-
-    if(
-        appState.imageFile.type ===
-        "image/png"
-    ){
-
-        embeddedImage =
-            await page.doc.embedPng(
-                imageBytes
-            );
-
-    }else{
-
-        embeddedImage =
-            await page.doc.embedJpg(
-                imageBytes
-            );
-
-    }
-
-    const scale =
-        appState.imageScale / 100;
-
-    const imageWidth =
-        embeddedImage.width *
-        scale;
-
-    const imageHeight =
-        embeddedImage.height *
-        scale;
-
-    const x =
-        (
-            pageWidth -
-            imageWidth
-        ) / 2;
-
-    const y =
-        (
-            pageHeight -
-            imageHeight
-        ) / 2;
-
-    page.drawImage(
-
-        embeddedImage,
-
-        {
-
-            x,
-
-            y,
-
-            width:
-                imageWidth,
-
-            height:
-                imageHeight,
-
-            opacity:
-                appState.imageOpacity / 100,
-
-            rotate:
-                PDFLib.degrees(
-                    appState.imageRotation
-                )
-
-        }
-
-    );
-
-           }     
-           async function exportPDF(){
-
-    if(
-        !appState.pdfFile
-    ) return;
-
-   const existingPdfBytes =
-    await appState.pdfFile.arrayBuffer();
-
-const pdfDocument =
-    await PDFLib.PDFDocument.load(
-        existingPdfBytes
-    );
-
-const pages =
-    pdfDocument.getPages();
-
-const totalPages =
-    pages.length;
-              for(
-    let i = 0;
-    i < totalPages;
-    i++
-){
-const pageNumber =
-    i + 1;
-
-if(
-    !shouldProcessPage(
-        pageNumber
-    )
-){
-
-    continue;
-
-}
-    const page =
-        pages[i];
-
-    const pageWidth =
-        page.getWidth();
-
-    const pageHeight =
-        page.getHeight();
-if(
-    appState.watermarkType ===
-    "text"
-){
-
-    await exportTextWatermark(
-        page,
-        pageWidth,
-        pageHeight
-    );
-
-}
-
-if(
-    appState.watermarkType ===
-    "image"
-){
-
-    await exportImageWatermark(
-        page,
-        pageWidth,
-        pageHeight
-    );
-
-  }
-              }
-const pdfBytes =
-    await pdfDocument.save();
-
-const blob =
-    new Blob(
-        [pdfBytes],
-        {
-            type:
-                "application/pdf"
-        }
-    );
-
-const url =
-    URL.createObjectURL(
-        blob
-    );
-
-const link =
-    document.createElement(
-        "a"
-    );
-
-link.href =
-    url;
-
-link.download =
-    "watermarked.pdf";
-
-document.body.appendChild(
-    link
-);
-
-link.click();
-
-document.body.removeChild(
-    link
-);
-
-URL.revokeObjectURL(
-    url
-);
-
-              }  
-           
-async function exportTextWatermark(
+           }
+           async function exportTextWatermark(
     page,
     pageWidth,
     pageHeight
@@ -1901,6 +1712,7 @@ async function exportTextWatermark(
 
 
 async function exportImageWatermark(
+    pdfDocument,
     page,
     pageWidth,
     pageHeight
@@ -1910,9 +1722,86 @@ async function exportImageWatermark(
         !appState.imageFile
     ) return;
 
-    console.log(
-        "Image watermark export engine ready."
+    const imageBytes =
+        await appState.imageFile.arrayBuffer();
+
+    let embeddedImage;
+
+    if(
+        appState.imageFile.type ===
+        "image/png"
+    ){
+
+        embeddedImage =
+            await pdfDocument.embedPng(
+                imageBytes
+            );
+
+    }else{
+
+        embeddedImage =
+            await pdfDocument.embedJpg(
+                imageBytes
+            );
+
+    }
+
+    const scale =
+        (
+            appState.imageScale || 100
+        ) / 100;
+
+    const imageWidth =
+        embeddedImage.width *
+        scale;
+
+    const imageHeight =
+        embeddedImage.height *
+        scale;
+
+    const x =
+        (
+            pageWidth -
+            imageWidth
+        ) / 2;
+
+    const y =
+        (
+            pageHeight -
+            imageHeight
+        ) / 2;
+
+    page.drawImage(
+
+        embeddedImage,
+
+        {
+
+            x,
+
+            y,
+
+            width:
+                imageWidth,
+
+            height:
+                imageHeight,
+
+            opacity:
+                (
+                    appState.imageOpacity ||
+                    100
+                ) / 100,
+
+            rotate:
+                PDFLib.degrees(
+                    appState.imageRotation ||
+                    0
+                )
+
+        }
+
     );
 
-}
+   }
            
