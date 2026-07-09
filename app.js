@@ -374,7 +374,7 @@ async function extractPDFInformation(
 
         appState.totalPages =
             pdf.numPages;
-
+    }
     catch(error){
 
     console.error(
@@ -392,10 +392,11 @@ async function extractPDFInformation(
     }
 
         
-            "Failed to load PDF file."
-        );
+            showError(
+    error.message
+);
 
-    }
+}
 
 }
 
@@ -586,14 +587,7 @@ lineHeightSlider?.addEventListener(
 
     }
 );
-function refreshPreview(){
 
-    console.log(
-        "Preview Updated",
-        appState
-    );
-
-}
 const weightButtons =
     document.querySelectorAll(
         "[data-weight]"
