@@ -1647,7 +1647,92 @@ async function exportTextWatermark(
     );
 
 }
-           }
+      async function exportImageWatermark(
+    page,
+    pageWidth,
+    pageHeight
+){
+
+    if(
+        !appState.imageFile
+    ) return;
+
+    const imageBytes =
+        await appState.imageFile.arrayBuffer();
+
+    let embeddedImage;
+
+    if(
+        appState.imageFile.type ===
+        "image/png"
+    ){
+
+        embeddedImage =
+            await page.doc.embedPng(
+                imageBytes
+            );
+
+    }else{
+
+        embeddedImage =
+            await page.doc.embedJpg(
+                imageBytes
+            );
+
+    }
+
+    const scale =
+        appState.imageScale / 100;
+
+    const imageWidth =
+        embeddedImage.width *
+        scale;
+
+    const imageHeight =
+        embeddedImage.height *
+        scale;
+
+    const x =
+        (
+            pageWidth -
+            imageWidth
+        ) / 2;
+
+    const y =
+        (
+            pageHeight -
+            imageHeight
+        ) / 2;
+
+    page.drawImage(
+
+        embeddedImage,
+
+        {
+
+            x,
+
+            y,
+
+            width:
+                imageWidth,
+
+            height:
+                imageHeight,
+
+            opacity:
+                appState.imageOpacity / 100,
+
+            rotate:
+                PDFLib.degrees(
+                    appState.imageRotation
+                )
+
+        }
+
+    );
+
+           }     
            async function exportPDF(){
 
     if(
