@@ -350,6 +350,7 @@ async function loadPDF(file){
     updateFileCard();
 
               }
+
 async function extractPDFInformation(
     file
 ){
@@ -362,10 +363,8 @@ async function extractPDFInformation(
         const pdf =
             await pdfjsLib
                 .getDocument({
-
                     data:
                         arrayBuffer
-
                 })
                 .promise;
 
@@ -374,15 +373,9 @@ async function extractPDFInformation(
         appState.totalPages =
             pdf.numPages;
 
-        console.log(
-            "PDF loaded successfully"
-        );
-
     }catch(error){
 
-        console.error(
-            error
-        );
+        console.error(error);
 
         showError(
             "Failed to load PDF file."
@@ -390,7 +383,10 @@ async function extractPDFInformation(
 
     }
 
-                       }
+}
+
+
+function updateFileCard(){
 
     fileNameElement.textContent =
         appState.pdfName;
@@ -403,7 +399,9 @@ async function extractPDFInformation(
     pageCountElement.textContent =
         `${appState.totalPages} Pages`;
 
-    fileInfo.classList.remove("hidden");
+    fileInfo.classList.remove(
+        "hidden"
+    );
 
     document
         .getElementById(
