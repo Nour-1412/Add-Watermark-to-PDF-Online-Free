@@ -348,7 +348,9 @@ async function loadPDF(file){
     await extractPDFInformation(file);
 
     updateFileCard();
-
+await renderPreviewPage(
+    1
+);
               }
 
 async function extractPDFInformation(
