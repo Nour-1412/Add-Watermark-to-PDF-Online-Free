@@ -1500,11 +1500,388 @@ const exportButton =
         !appState.pdfFile
     ) return;
 
-    alert(
-        "Export Engine will be connected in the next step."
-    );
+    const existingPdfBytes =
+        await appState.pdfFile.arrayBuffer();
+
+    const pdfDocument =
+        await PDFLib.PDFDocument.load(
+            existingPdfBytes
+        );
+
+    const pages =
+        pdfDocument.getPages();
+
+    const totalPages =
+        pages.length;
+
+    for(
+        let i = 0;
+        i < totalPages;
+        i++
+    ){
+const pageNumber =
+    i + 1;
+
+if(
+    !shouldProcessPage(
+        pageNumber
+    )
+){
+    continue;
+       }
+        const page =
+            pages[i];
+
+        const pageWidth =
+            page.getWidth();
+
+        const pageHeight =
+            page.getHeight();
+
+        console.log(
+            `Processing page ${
+                i + 1
+            }`
+        );
+
+    }
 
            }
-           
-           
+           function shouldProcessPage(
+    pageNumber
+){
+
+    switch(
+        appState.pageMode
+    ){
+
+        case "all":
+            return true;
+
+        case "first":
+            return pageNumber === 1;
+
+        case "last":
+            return (
+                pageNumber ===
+                appState.totalPages
+            );
+
+        case "odd":
+            return (
+                pageNumber % 2 === 1
+            );
+
+        case "even":
+            return (
+                pageNumber % 2 === 0
+            );
+
+        case "custom":
+
+            const customPages =
+                appState.customPages
+                .split(",")
+
+                .map(
+                    p => Number(
+                        p.trim()
+                    )
+                );
+
+            return customPages.includes(
+                pageNumber
+            );
+
+        default:
+            return true;
+
+    }
+async function exportTextWatermark(
+    page,
+    pageWidth,
+    pageHeight
+){
+
+    if(
+        !appState.text
+    ) return;
+
+    const {
+        rgb,
+        degrees
+    } = PDFLib;
+
+    page.drawText(
+
+        appState.text,
+
+        {
+
+            x:
+                pageWidth / 2,
+
+            y:
+                pageHeight / 2,
+
+            size:
+                appState.fontSize,
+
+            rotate:
+                degrees(
+                    appState.rotation
+                ),
+
+            opacity:
+                appState.opacity / 100,
+
+            color:
+                rgb(
+                    0.5,
+                    0.5,
+                    0.5
+                )
+
+        }
+
+    );
+
+}
+           }
+           async function exportPDF(){
+
+    if(
+        !appState.pdfFile
+    ) return;
+
+   const existingPdfBytes =
+    await appState.pdfFile.arrayBuffer();
+
+const pdfDocument =
+    await PDFLib.PDFDocument.load(
+        existingPdfBytes
+    );
+
+const pages =
+    pdfDocument.getPages();
+
+const totalPages =
+    pages.length;
+              for(
+    let i = 0;
+    i < totalPages;
+    i++
+){
+const pageNumber =
+    i + 1;
+
+if(
+    !shouldProcessPage(
+        pageNumber
+    )
+){
+
+    continue;
+
+}
+    const page =
+        pages[i];
+
+    const pageWidth =
+        page.getWidth();
+
+    const pageHeight =
+        page.getHeight();
+if(
+    appState.watermarkType ===
+    "text"
+){
+
+    await exportTextWatermark(
+        page,
+        pageWidth,
+        pageHeight
+    );
+
+}
+
+if(
+    appState.watermarkType ===
+    "image"
+){
+
+    await exportImageWatermark(
+        page,
+        pageWidth,
+        pageHeight
+    );
+
+  }
+              }
+const pdfBytes =
+    await pdfDocument.save();
+
+const blob =
+    new Blob(
+        [pdfBytes],
+        {
+            type:
+                "application/pdf"
+        }
+    );
+
+const url =
+    URL.createObjectURL(
+        blob
+    );
+
+const link =
+    document.createElement(
+        "a"
+    );
+
+link.href =
+    url;
+
+link.download =
+    "watermarked.pdf";
+
+document.body.appendChild(
+    link
+);
+
+link.click();
+
+document.body.removeChild(
+    link
+);
+
+URL.revokeObjectURL(
+    url
+);
+
+              }  
+           function shouldProcessPage(
+    pageNumber
+){
+
+    switch(
+        appState.pageMode
+    ){
+
+        case "all":
+            return true;
+
+        case "first":
+            return pageNumber === 1;
+
+        case "last":
+            return (
+                pageNumber ===
+                appState.totalPages
+            );
+
+        case "odd":
+            return (
+                pageNumber % 2 === 1
+            );
+
+        case "even":
+            return (
+                pageNumber % 2 === 0
+            );
+
+        case "custom":
+
+            const customPages =
+                appState.customPages
+                .split(",")
+
+                .map(
+                    p => Number(
+                        p.trim()
+                    )
+                );
+
+            return customPages.includes(
+                pageNumber
+            );
+
+        default:
+            return true;
+
+    }
+
+}
+
+
+
+async function exportTextWatermark(
+    page,
+    pageWidth,
+    pageHeight
+){
+
+    if(
+        !appState.text
+    ) return;
+
+    const {
+        rgb,
+        degrees
+    } = PDFLib;
+
+    page.drawText(
+
+        appState.text,
+
+        {
+
+            x:
+                pageWidth / 2,
+
+            y:
+                pageHeight / 2,
+
+            size:
+                appState.fontSize,
+
+            rotate:
+                degrees(
+                    appState.rotation
+                ),
+
+            opacity:
+                appState.opacity / 100,
+
+            color:
+                rgb(
+                    0.5,
+                    0.5,
+                    0.5
+                )
+
+        }
+
+    );
+
+}
+
+
+
+async function exportImageWatermark(
+    page,
+    pageWidth,
+    pageHeight
+){
+
+    if(
+        !appState.imageFile
+    ) return;
+
+    console.log(
+        "Image watermark export engine ready."
+    );
+
+}
            
