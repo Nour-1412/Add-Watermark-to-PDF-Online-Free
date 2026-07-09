@@ -375,11 +375,23 @@ async function extractPDFInformation(
         appState.totalPages =
             pdf.numPages;
 
-    }catch(error){
+    catch(error){
 
-        console.error(error);
+    console.error(
+        error
+    );
 
-        showError(
+    alert(
+        error.message
+    );
+
+    showError(
+        error.message
+    );
+
+    }
+
+        
             "Failed to load PDF file."
         );
 
