@@ -1034,6 +1034,22 @@ const pageButtons =
     document.querySelectorAll(
         ".page-btn"
     );
+
+const customPagesGroup =
+    document.getElementById(
+        "custom-pages-group"
+    );
+
+const customPagesInput =
+    document.getElementById(
+        "custom-pages"
+    );
+
+const excludedPagesInput =
+    document.getElementById(
+        "excluded-pages"
+    );
+
 pageButtons.forEach(button => {
 
     button.addEventListener(
@@ -1041,9 +1057,10 @@ pageButtons.forEach(button => {
         () => {
 
             pageButtons.forEach(
-                btn => btn.classList.remove(
-                    "active"
-                )
+                btn =>
+                    btn.classList.remove(
+                        "active"
+                    )
             );
 
             button.classList.add(
@@ -1055,8 +1072,14 @@ pageButtons.forEach(button => {
 
             updatePageUI();
 
-            refreshPreview
-           function updatePageUI(){
+            refreshPreview();
+
+        }
+    );
+
+});
+
+function updatePageUI(){
 
     customPagesGroup?.classList.add(
         "hidden"
@@ -1073,8 +1096,9 @@ pageButtons.forEach(button => {
 
     }
 
-           }
-           customPagesInput?.addEventListener(
+}
+
+customPagesInput?.addEventListener(
     "input",
     (event) => {
 
@@ -1085,7 +1109,8 @@ pageButtons.forEach(button => {
 
     }
 );
-           excludedPagesInput?.addEventListener(
+
+excludedPagesInput?.addEventListener(
     "input",
     (event) => {
 
