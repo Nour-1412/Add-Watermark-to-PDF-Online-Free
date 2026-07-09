@@ -948,7 +948,18 @@ const horizontalMarginSlider =
 
 const verticalMarginSlider =
     document.getElementById(
-        "
+        "vertical-margin"
+    );
+
+const repeatSpacingXSlider =
+    document.getElementById(
+        "repeat-spacing-x"
+    );
+
+const repeatSpacingYSlider =
+    document.getElementById(
+        "repeat-spacing-y"
+    );
        customXSlider?.addEventListener(
     "input",
     (event) => {
