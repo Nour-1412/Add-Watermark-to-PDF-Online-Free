@@ -1846,61 +1846,7 @@ URL.revokeObjectURL(
 );
 
               }  
-           function shouldProcessPage(
-    pageNumber
-){
-
-    switch(
-        appState.pageMode
-    ){
-
-        case "all":
-            return true;
-
-        case "first":
-            return pageNumber === 1;
-
-        case "last":
-            return (
-                pageNumber ===
-                appState.totalPages
-            );
-
-        case "odd":
-            return (
-                pageNumber % 2 === 1
-            );
-
-        case "even":
-            return (
-                pageNumber % 2 === 0
-            );
-
-        case "custom":
-
-            const customPages =
-                appState.customPages
-                .split(",")
-
-                .map(
-                    p => Number(
-                        p.trim()
-                    )
-                );
-
-            return customPages.includes(
-                pageNumber
-            );
-
-        default:
-            return true;
-
-    }
-
-}
-
-
-
+           
 async function exportTextWatermark(
     page,
     pageWidth,
