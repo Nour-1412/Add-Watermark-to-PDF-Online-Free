@@ -1,7 +1,14 @@
 /* ==========================================
    WEBBAG PDF WATERMARK STATE
 ========================================== */
+if(
+    window.pdfjsLib
+){
 
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+
+}
 const appState = {
 
     /* -------------------------
@@ -343,19 +350,47 @@ async function loadPDF(file){
     updateFileCard();
 
               }
-async function extractPDFInformation(file){
+async function extractPDFInformation(
+    file
+){
 
-    const arrayBuffer = await file.arrayBuffer();
+    try{
 
-    const pdf = await pdfjsLib.getDocument(
-        arrayBuffer
-    ).promise;
-   loadedPdf = pdf;
+        const arrayBuffer =
+            await file.arrayBuffer();
 
-    appState.totalPages = pdf.numPages;
+        const pdf =
+            await pdfjsLib
+                .getDocument({
 
-}
-function updateFileCard(){
+                    data:
+                        arrayBuffer
+
+                })
+                .promise;
+
+        loadedPdf = pdf;
+
+        appState.totalPages =
+            pdf.numPages;
+
+        console.log(
+            "PDF loaded successfully"
+        );
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+        showError(
+            "Failed to load PDF file."
+        );
+
+    }
+
+                       }
 
     fileNameElement.textContent =
         appState.pdfName;
