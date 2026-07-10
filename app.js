@@ -365,8 +365,7 @@ async function extractPDFInformation(
         const pdf =
             await pdfjsLib
                 .getDocument({
-                    data:
-                        arrayBuffer
+                    data: arrayBuffer
                 })
                 .promise;
 
@@ -374,33 +373,25 @@ async function extractPDFInformation(
 
         appState.totalPages =
             pdf.numPages;
+
     }
     catch(error){
 
-    console.error(
-        error
-    );
+        console.error(
+            error
+        );
 
-    alert(
-        error.message
-    );
+        alert(
+            error.message
+        );
 
-    showError(
-        error.message
-    );
+        showError(
+            error.message
+        );
 
     }
 
-        
-            showError(
-    error.message
-);
-
 }
-
-}
-
-
 function updateFileCard(){
 
     fileNameElement.textContent =
