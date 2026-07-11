@@ -18,6 +18,7 @@ const dropZone =
     );
 
 let uploadedFile = null;
+let loadedPdf = null;
 const watermarkSettings = {
 
     text:
