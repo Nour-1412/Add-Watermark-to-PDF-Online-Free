@@ -18,7 +18,21 @@ const dropZone =
     );
 
 let uploadedFile = null;
+const watermarkSettings = {
 
+    text:
+        "",
+
+    fontSize:
+        32,
+
+    opacity:
+        50,
+
+    rotation:
+        -45
+
+};
 
 /* ==========================================
    BUTTON CLICK
@@ -159,3 +173,87 @@ document
     );
     }
 );
+/* ==========================================
+   WATERMARK SETTINGS EVENTS
+========================================== */
+
+const watermarkText =
+    document.getElementById(
+        "watermark-text"
+    );
+
+const fontSize =
+    document.getElementById(
+        "font-size"
+    );
+
+const opacity =
+    document.getElementById(
+        "opacity"
+    );
+
+const rotation =
+    document.getElementById(
+        "rotation"
+    );
+
+
+watermarkText.addEventListener(
+    "input",
+    (event)=>{
+
+        watermarkSettings.text =
+            event.target.value;
+
+        console.log(
+            watermarkSettings
+        );
+
+    }
+);
+
+
+fontSize.addEventListener(
+    "input",
+    (event)=>{
+
+        watermarkSettings.fontSize =
+            event.target.value;
+
+        console.log(
+            watermarkSettings
+        );
+
+    }
+);
+
+
+opacity.addEventListener(
+    "input",
+    (event)=>{
+
+        watermarkSettings.opacity =
+            event.target.value;
+
+        console.log(
+            watermarkSettings
+        );
+
+    }
+);
+
+
+rotation.addEventListener(
+    "input",
+    (event)=>{
+
+        watermarkSettings.rotation =
+            event.target.value;
+
+        console.log(
+            watermarkSettings
+        );
+
+    }
+);
+
