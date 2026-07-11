@@ -316,16 +316,36 @@ async function loadPdfPreview(
     file
 ){
 
-    const arrayBuffer =
-        await file.arrayBuffer();
+    try{
 
-    loadedPdf =
-        await pdfjsLib.getDocument(
-            {
-                data:
-                    arrayBuffer
-            }
-        ).promise;
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+        loadedPdf =
+            await pdfjsLib
+                .getDocument({
+                    data:
+                        arrayBuffer
+                })
+                .promise;
+
+        console.log(
+            "PDF Loaded Successfully"
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            error
+        );
+
+        alert(
+            "PDF Loading Failed"
+        );
+
+    }
 
 }
 
