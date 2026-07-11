@@ -1,31 +1,44 @@
+<!-- ==========================================
+     PDF UPLOAD SECTION
+========================================== -->
 
-<section id="upload-section" class="tool-section active-section">
+<section
+    id="upload-section"
+    class="tool-section active-section"
+>
 
-    <div id="drop-zone" class="upload-card">
+    <div
+        id="drop-zone"
+        class="upload-card"
+    >
+
+        <div class="upload-glow"></div>
 
         <div class="upload-icon">
             📄
         </div>
 
-        <h2>
-            Drop PDF Here
-        </h2>
+        <h1 class="upload-title">
+            Upload Your PDF
+        </h1>
 
-        <p>
-            or click the button below to choose a file
+        <p class="upload-description">
+            Drag & Drop your PDF here
+            or choose it from your device
         </p>
 
         <button
             id="choose-file-btn"
-            class="primary-btn"
+            class="primary-button"
+            type="button"
         >
             Choose PDF File
         </button>
 
         <input
-            type="file"
             id="pdf-input"
-            accept=".pdf"
+            type="file"
+            accept=".pdf,application/pdf"
             hidden
         >
 
@@ -41,16 +54,35 @@
         class="file-card hidden"
     >
 
-        <h3 id="file-name"></h3>
+        <div class="file-card-header">
 
-        <p id="file-size"></p>
+            <div class="file-icon">
+                📑
+            </div>
 
-        <p id="page-count"></p>
+            <div class="file-details">
+
+                <h3 id="file-name">
+                    -
+                </h3>
+
+                <p id="file-size">
+                    -
+                </p>
+
+                <p id="page-count">
+                    -
+                </p>
+
+            </div>
+
+        </div>
 
         <button
             id="go-to-watermark-btn"
-            class="primary-btn"
+            class="primary-button"
             disabled
+            type="button"
         >
             Continue To Watermark Settings
         </button>
@@ -58,3 +90,4 @@
     </div>
 
 </section>
+
