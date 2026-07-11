@@ -257,3 +257,52 @@ rotation.addEventListener(
     }
 );
 
+const watermarkPreview =
+    document.getElementById(
+        "watermark-preview"
+    );
+
+
+function updatePreview(){
+
+    watermarkPreview.textContent =
+        watermarkSettings.text ||
+        "WATERMARK";
+
+    watermarkPreview.style.fontSize =
+        watermarkSettings.fontSize
+        + "px";
+
+    watermarkPreview.style.opacity =
+        watermarkSettings.opacity
+        / 100;
+
+    watermarkPreview.style.transform =
+        `rotate(
+            ${watermarkSettings.rotation}deg
+        )`;
+
+}
+
+
+watermarkText.addEventListener(
+    "input",
+    updatePreview
+);
+
+fontSize.addEventListener(
+    "input",
+    updatePreview
+);
+
+opacity.addEventListener(
+    "input",
+    updatePreview
+);
+
+rotation.addEventListener(
+    "input",
+    updatePreview
+);
+
+updatePreview();
