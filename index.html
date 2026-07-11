@@ -148,12 +148,91 @@
              WATERMARK SETTINGS
         =================================== -->
 
-        <section
-            id="watermark-section"
-            class="hidden"
+    <section
+    id="watermark-section"
+    class="hidden"
+>
+
+    <div class="settings-card">
+
+        <h2 class="section-title">
+            Watermark Settings
+        </h2>
+
+        <div class="input-group">
+
+            <label>
+                Watermark Text
+            </label>
+
+            <input
+                id="watermark-text"
+                type="text"
+                placeholder="Enter watermark text"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>
+                Font Size
+            </label>
+
+            <input
+                id="font-size"
+                type="range"
+                min="12"
+                max="80"
+                value="32"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>
+                Opacity
+            </label>
+
+            <input
+                id="opacity"
+                type="range"
+                min="10"
+                max="100"
+                value="50"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>
+                Rotation
+            </label>
+
+            <input
+                id="rotation"
+                type="range"
+                min="-180"
+                max="180"
+                value="-45"
+            >
+
+        </div>
+
+        <button
+            id="continue-preview-btn"
+            class="primary-button"
         >
 
-        </section>
+            Continue To Preview
+
+        </button>
+
+    </div>
+
+    </section>
 
 
         <!-- ==================================
