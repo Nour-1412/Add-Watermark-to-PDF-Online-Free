@@ -306,3 +306,37 @@ rotation.addEventListener(
 );
 
 updatePreview();
+/* ==========================================
+   NAVIGATION TO PREVIEW
+========================================== */
+
+const continuePreviewBtn =
+    document.getElementById(
+        "continue-preview-btn"
+    );
+
+continuePreviewBtn.addEventListener(
+    "click",
+    ()=>{
+
+        document
+            .getElementById(
+                "watermark-section"
+            )
+            .classList.add(
+                "hidden"
+            );
+
+        document
+            .getElementById(
+                "preview-section"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+        updatePreview();
+
+    }
+);
+
