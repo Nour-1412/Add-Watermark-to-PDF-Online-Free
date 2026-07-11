@@ -80,6 +80,9 @@ pdfInput.addEventListener(
 
         uploadedFile =
             file;
+       loadPdfPreview(
+    file
+);
 
         console.log(
             "PDF Loaded:",
@@ -307,6 +310,73 @@ rotation.addEventListener(
 );
 
 updatePreview();
+async function loadPdfPreview(
+    file
+){
+
+    const arrayBuffer =
+        await file.arrayBuffer();
+
+    loadedPdf =
+        await pdfjsLib.getDocument(
+            {
+                data:
+                    arrayBuffer
+            }
+        ).promise;
+
+}
+
+
+async function renderFirstPage(){
+
+    if(
+        !loadedPdf
+    ){
+        return;
+    }
+
+    const page =
+        await loadedPdf.getPage(
+            1
+        );
+
+    const canvas =
+        document.getElementById(
+            "pdf-preview-canvas"
+        );
+
+    const context =
+        canvas.getContext(
+            "2d"
+        );
+
+    const viewport =
+        page.getViewport(
+            {
+                scale:
+                    1.2
+            }
+        );
+
+    canvas.width =
+        viewport.width;
+
+    canvas.height =
+        viewport.height;
+
+    await page.render(
+        {
+            canvasContext:
+                context,
+
+            viewport:
+                viewport
+        }
+    ).promise;
+
+   }
+
 /* ==========================================
    NAVIGATION TO PREVIEW
 ========================================== */
@@ -340,4 +410,70 @@ continuePreviewBtn.addEventListener(
 
     }
 );
+async function loadPdfPreview(
+    file
+){
+
+    const arrayBuffer =
+        await file.arrayBuffer();
+
+    loadedPdf =
+        await pdfjsLib.getDocument(
+            {
+                data:
+                    arrayBuffer
+            }
+        ).promise;
+
+}
+
+
+async function renderFirstPage(){
+
+    if(
+        !loadedPdf
+    ){
+        return;
+    }
+
+    const page =
+        await loadedPdf.getPage(
+            1
+        );
+
+    const canvas =
+        document.getElementById(
+            "pdf-preview-canvas"
+        );
+
+    const context =
+        canvas.getContext(
+            "2d"
+        );
+
+    const viewport =
+        page.getViewport(
+            {
+                scale:
+                    1.2
+            }
+        );
+
+    canvas.width =
+        viewport.width;
+
+    canvas.height =
+        viewport.height;
+
+    await page.render(
+        {
+            canvasContext:
+                context,
+
+            viewport:
+                viewport
+        }
+    ).promise;
+
+   }
 
