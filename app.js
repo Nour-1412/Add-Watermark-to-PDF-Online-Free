@@ -74,6 +74,21 @@ pdfInput.addEventListener(
         alert(
             `Loaded: ${file.name}`
         );
+       document
+    .getElementById(
+        "upload-section"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+document
+    .getElementById(
+        "watermark-section"
+    )
+    .classList.remove(
+        "hidden"
+    );
 
     }
 );
@@ -126,6 +141,21 @@ dropZone.addEventListener(
         alert(
             `Loaded: ${file.name}`
         );
+       
+document
+    .getElementById(
+        "upload-section"
+    )
+    .classList.add(
+        "hidden"
+    );
 
+document
+    .getElementById(
+        "watermark-section"
+    )
+    .classList.remove(
+        "hidden"
+    );
     }
 );
