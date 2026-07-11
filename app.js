@@ -293,3 +293,309 @@ function hideError(){
     );
 
          }     
+/* ==========================================
+   STEP NAVIGATION STATE
+========================================== */
+
+appState.currentStep =
+    1;
+
+appState.watermarkType =
+    "text";
+
+
+/* ==========================================
+   STEP ELEMENTS
+========================================== */
+
+const uploadSection =
+    document.getElementById(
+        "upload-section"
+    );
+
+const watermarkSection =
+    document.getElementById(
+        "watermark-section"
+    );
+
+const previewSection =
+    document.getElementById(
+        "preview-section"
+    );
+
+const exportSection =
+    document.getElementById(
+        "export-section"
+    );
+
+const stepUpload =
+    document.getElementById(
+        "step-upload"
+    );
+
+const stepWatermark =
+    document.getElementById(
+        "step-watermark"
+    );
+
+const stepPreview =
+    document.getElementById(
+        "step-preview"
+    );
+
+const stepExport =
+    document.getElementById(
+        "step-export"
+    );
+
+
+/* ==========================================
+   NAVIGATION BUTTONS
+========================================== */
+
+const goToWatermarkButton =
+    document.getElementById(
+        "go-to-watermark-btn"
+    );
+
+const backToUploadButton =
+    document.getElementById(
+        "back-to-upload-btn"
+    );
+
+const continueToPreviewButton =
+    document.getElementById(
+        "continue-to-preview-btn"
+    );
+
+const backToSettingsButton =
+    document.getElementById(
+        "back-to-settings-btn"
+    );
+
+const continueToExportButton =
+    document.getElementById(
+        "continue-to-export-btn"
+    );
+
+const backToPreviewButton =
+    document.getElementById(
+        "back-to-preview-btn"
+    );
+
+
+/* ==========================================
+   STEP FUNCTIONS
+========================================== */
+
+function showStep(
+    stepNumber
+){
+
+    uploadSection.classList.remove(
+        "active-section"
+    );
+
+    watermarkSection.classList.remove(
+        "active-section"
+    );
+
+    previewSection.classList.remove(
+        "active-section"
+    );
+
+    exportSection.classList.remove(
+        "active-section"
+    );
+
+    stepUpload.classList.remove(
+        "active"
+    );
+
+    stepWatermark.classList.remove(
+        "active"
+    );
+
+    stepPreview.classList.remove(
+        "active"
+    );
+
+    stepExport.classList.remove(
+        "active"
+    );
+
+    if(
+        stepNumber === 1
+    ){
+
+        uploadSection.classList.add(
+            "active-section"
+        );
+
+        stepUpload.classList.add(
+            "active"
+        );
+
+    }
+
+    if(
+        stepNumber === 2
+    ){
+
+        watermarkSection.classList.add(
+            "active-section"
+        );
+
+        stepWatermark.classList.add(
+            "active"
+        );
+
+    }
+
+    if(
+        stepNumber === 3
+    ){
+
+        previewSection.classList.add(
+            "active-section"
+        );
+
+        stepPreview.classList.add(
+            "active"
+        );
+
+    }
+
+    if(
+        stepNumber === 4
+    ){
+
+        exportSection.classList.add(
+            "active-section"
+        );
+
+        stepExport.classList.add(
+            "active"
+        );
+
+    }
+
+    appState.currentStep =
+        stepNumber;
+
+}
+
+
+/* ==========================================
+   BUTTON NAVIGATION
+========================================== */
+
+goToWatermarkButton?.addEventListener(
+    "click",
+    () => {
+
+        showStep(
+            2
+        );
+
+    }
+);
+
+backToUploadButton?.addEventListener(
+    "click",
+    () => {
+
+        showStep(
+            1
+        );
+
+    }
+);
+
+continueToPreviewButton?.addEventListener(
+    "click",
+    () => {
+
+        showStep(
+            3
+        );
+
+    }
+);
+
+backToSettingsButton?.addEventListener(
+    "click",
+    () => {
+
+        showStep(
+            2
+        );
+
+    }
+);
+
+continueToExportButton?.addEventListener(
+    "click",
+    () => {
+
+        showStep(
+            4
+        );
+
+    }
+);
+
+backToPreviewButton?.addEventListener(
+    "click",
+    () => {
+
+        showStep(
+            3
+        );
+
+    }
+);
+
+
+/* ==========================================
+   WATERMARK TYPE SELECTION
+========================================== */
+
+const watermarkCards =
+    document.querySelectorAll(
+        ".watermark-card"
+    );
+
+watermarkCards.forEach(
+    (
+        card
+    ) => {
+
+        card.addEventListener(
+            "click",
+            () => {
+
+                watermarkCards.forEach(
+                    (
+                        item
+                    ) => {
+
+                        item.classList.remove(
+                            "active-type"
+                        );
+
+                    }
+                );
+
+                card.classList.add(
+                    "active-type"
+                );
+
+                appState.watermarkType =
+                    card.dataset.type;
+
+            }
+        );
+
+    }
+);
