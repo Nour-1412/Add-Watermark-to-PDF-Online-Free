@@ -52,11 +52,10 @@ chooseFileBtn.addEventListener(
 /* ==========================================
    FILE SELECT
 ========================================== */
-
 pdfInput.addEventListener(
     "change",
-    (event) => {
-
+    async (event)=>{
+    
         const file =
             event.target.files[0];
 
@@ -80,7 +79,7 @@ pdfInput.addEventListener(
 
         uploadedFile =
             file;
-       loadPdfPreview(
+       await loadPdfPreview(
     file
 );
 
@@ -127,7 +126,7 @@ dropZone.addEventListener(
 
 dropZone.addEventListener(
     "drop",
-    (event) => {
+    async (event)=>{
 
         event.preventDefault();
 
@@ -155,7 +154,7 @@ dropZone.addEventListener(
 
         uploadedFile =
             file;
-       loadPdfPreview(
+       await loadPdfPreview(
     file
 );
 
