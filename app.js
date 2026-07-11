@@ -155,6 +155,9 @@ dropZone.addEventListener(
 
         uploadedFile =
             file;
+       loadPdfPreview(
+    file
+);
 
         alert(
             `Loaded: ${file.name}`
