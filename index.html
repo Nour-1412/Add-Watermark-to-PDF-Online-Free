@@ -1,93 +1,174 @@
-<!-- ==========================================
-     PDF UPLOAD SECTION
-========================================== -->
+<!DOCTYPE html>
+<html lang="en">
 
-<section
-    id="upload-section"
-    class="tool-section active-section"
->
+<head>
 
-    <div
-        id="drop-zone"
-        class="upload-card"
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
     >
 
-        <div class="upload-glow"></div>
+    <title>
+        WebBag PDF Watermark
+    </title>
 
-        <div class="upload-icon">
-            📄
-        </div>
-
-        <h1 class="upload-title">
-            Upload Your PDF
-        </h1>
-
-        <p class="upload-description">
-            Drag & Drop your PDF here
-            or choose it from your device
-        </p>
-
-        <button
-            id="choose-file-btn"
-            class="primary-button"
-            type="button"
-        >
-            Choose PDF File
-        </button>
-
-        <input
-            id="pdf-input"
-            type="file"
-            accept=".pdf,application/pdf"
-            hidden
-        >
-
-    </div>
-
-    <div
-        id="upload-error"
-        class="error-message hidden"
-    ></div>
-
-    <div
-        id="file-info"
-        class="file-card hidden"
+    <link
+        rel="stylesheet"
+        href="style.css"
     >
 
-        <div class="file-card-header">
+</head>
 
-            <div class="file-icon">
-                📑
-            </div>
+<body>
 
-            <div class="file-details">
+    <!-- ======================================
+         BACKGROUND EFFECTS
+    ======================================= -->
 
-                <h3 id="file-name">
-                    -
-                </h3>
+    <div class="background-blur blur-1"></div>
 
-                <p id="file-size">
-                    -
-                </p>
+    <div class="background-blur blur-2"></div>
 
-                <p id="page-count">
-                    -
-                </p>
+    <div class="background-blur blur-3"></div>
+
+
+    <!-- ======================================
+         MAIN CONTAINER
+    ======================================= -->
+
+    <main class="app-container">
+
+
+        <!-- ==================================
+             HEADER
+        =================================== -->
+
+        <header class="hero-section">
+
+            <div class="hero-badge">
+
+                PDF WATERMARK TOOL
 
             </div>
 
-        </div>
+            <h1 class="hero-title">
 
-        <button
-            id="go-to-watermark-btn"
-            class="primary-button"
-            disabled
-            type="button"
+                WebBag PDF Watermark
+
+            </h1>
+
+            <p class="hero-description">
+
+                Add beautiful text or image
+                watermarks to your PDF files
+                directly from your browser.
+
+            </p>
+
+        </header>
+
+
+        <!-- ==================================
+             STEP INDICATOR
+        =================================== -->
+
+        <section class="steps-container">
+
+            <div class="step active">
+                Upload
+            </div>
+
+            <div class="step">
+                Watermark
+            </div>
+
+            <div class="step">
+                Preview
+            </div>
+
+            <div class="step">
+                Export
+            </div>
+
+        </section>
+
+
+        <!-- ==================================
+             UPLOAD SECTION
+        =================================== -->
+
+        <section id="upload-section">
+
+        </section>
+
+
+        <!-- ==================================
+             WATERMARK SETTINGS
+        =================================== -->
+
+        <section
+            id="watermark-section"
+            class="hidden"
         >
-            Continue To Watermark Settings
-        </button>
 
-    </div>
+        </section>
 
-</section>
+
+        <!-- ==================================
+             PREVIEW SECTION
+        =================================== -->
+
+        <section
+            id="preview-section"
+            class="hidden"
+        >
+
+        </section>
+
+
+        <!-- ==================================
+             EXPORT SECTION
+        =================================== -->
+
+        <section
+            id="export-section"
+            class="hidden"
+        >
+
+        </section>
+
+
+        <!-- ==================================
+             FOOTER
+        =================================== -->
+
+        <footer class="footer">
+
+            <p>
+
+                © 2026 WebBag.
+                All Rights Reserved.
+
+            </p>
+
+        </footer>
+
+    </main>
+
+
+    <!-- ======================================
+         LIBRARIES
+    ======================================= -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.js"></script>
+
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
 
