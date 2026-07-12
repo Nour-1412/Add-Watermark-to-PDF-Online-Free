@@ -1,163 +1,123 @@
 /* ==========================================
-   PDF.JS WORKER
-========================================== */
-
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js";
-
-/* ==========================================
-   ELEMENTS
+   PDF UPLOAD SYSTEM
 ========================================== */
 
 const pdfInput =
-document.getElementById(
-    "pdf-input"
-);
+    document.getElementById(
+        "pdf-input"
+    );
 
 const chooseFileBtn =
-document.getElementById(
-    "choose-file-btn"
-);
+    document.getElementById(
+        "choose-file-btn"
+    );
 
 const dropZone =
-document.getElementById(
-    "drop-zone"
-);
-
-const fileNameElement =
-document.getElementById(
-    "file-name"
-);
-
-const uploadSection =
-document.getElementById(
-    "upload-section"
-);
-
-const watermarkSection =
-document.getElementById(
-    "watermark-section"
-);
-
-const previewSection =
-document.getElementById(
-    "preview-section"
-);
-
-const continuePreviewBtn =
-document.getElementById(
-    "continue-preview-btn"
-);
-
-const backToSettingsBtn =
-document.getElementById(
-    "back-to-settings-btn"
-);
-
-const previewCanvas =
-document.getElementById(
-    "pdf-preview-canvas"
-);
-
-const watermarkPreview =
-document.getElementById(
-    "watermark-preview"
-);
-
-const watermarkTextInput =
-document.getElementById(
-    "watermark-text"
-);
-
-const fontSizeInput =
-document.getElementById(
-    "font-size"
-);
-
-const opacityInput =
-document.getElementById(
-    "opacity"
-);
-
-const rotationInput =
-document.getElementById(
-    "rotation"
-);
-
-const watermarkColorInput =
-document.getElementById(
-    "watermark-color"
-);
-
-/* ==========================================
-   GLOBAL STATE
-========================================== */
+    document.getElementById(
+        "drop-zone"
+    );
 
 let uploadedFile = null;
-
-let uploadedPdfArrayBuffer =
-null;
-
 let loadedPdf = null;
-
 const watermarkSettings = {
 
-    text : "",
+    text:
+        "",
 
-    fontSize : 32,
+    fontSize:
+        32,
 
-    opacity : 50,
+    opacity:
+        50,
 
-    rotation : -45,
-
-    color : "#ffffff"
+    rotation:
+        -45
 
 };
 
 /* ==========================================
-   FILE BUTTON
+   BUTTON CLICK
 ========================================== */
 
 chooseFileBtn.addEventListener(
     "click",
-    ()=>{
+    () => {
 
         pdfInput.click();
 
     }
 );
 
-/* ==========================================
-   FILE INPUT
-========================================== */
 
+/* ==========================================
+   FILE SELECT
+========================================== */
 pdfInput.addEventListener(
     "change",
-    async(event)=>{
-
+    async (event)=>{
+    
         const file =
-        event.target.files[0];
+            event.target.files[0];
 
         if(
-            file
+            !file
+        ){
+            return;
+        }
+
+        if(
+            file.type !==
+            "application/pdf"
         ){
 
-            await handlePdfFile(
-                file
+            alert(
+                "Please choose a PDF file."
             );
 
+            return;
         }
+
+        uploadedFile =
+            file;
+       await loadPdfPreview(
+    file
+);
+
+        console.log(
+            "PDF Loaded:",
+            file.name
+        );
+
+        alert(
+            `Loaded: ${file.name}`
+        );
+       document
+    .getElementById(
+        "upload-section"
+    )
+    .classList.add(
+        "hidden"
+    );
+
+document
+    .getElementById(
+        "watermark-section"
+    )
+    .classList.remove(
+        "hidden"
+    );
 
     }
 );
 
+
 /* ==========================================
-   DRAG & DROP
+   DRAG AND DROP
 ========================================== */
 
 dropZone.addEventListener(
     "dragover",
-    (event)=>{
+    (event) => {
 
         event.preventDefault();
 
@@ -166,343 +126,291 @@ dropZone.addEventListener(
 
 dropZone.addEventListener(
     "drop",
-    async(event)=>{
+    async (event)=>{
 
         event.preventDefault();
 
         const file =
-        event.dataTransfer.files[0];
+            event.dataTransfer
+            .files[0];
 
         if(
-            file
+            !file
+        ){
+            return;
+        }
+
+        if(
+            file.type !==
+            "application/pdf"
         ){
 
-            await handlePdfFile(
-                file
+            alert(
+                "Please choose a PDF file."
             );
 
+            return;
         }
 
-    }
-);
-
-/* ==========================================
-   HANDLE PDF
-========================================== */
-
-async function handlePdfFile(
+        uploadedFile =
+            file;
+       await loadPdfPreview(
     file
-){
-
-    if(
-        file.type !==
-        "application/pdf"
-    ){
+);
 
         alert(
-            "Please select a PDF file."
+            `Loaded: ${file.name}`
         );
-
-        return;
-
-    }
-
-    uploadedFile =
-    file;
-
-    uploadedPdfArrayBuffer =
-    await file.arrayBuffer();
-
-    fileNameElement.textContent =
-    `Loaded: ${file.name}`;
-
-    uploadSection.classList.add(
-        "hidden"
-    );
-
-    watermarkSection.classList.remove(
-        "hidden"
-    );
-
-}
-
-/* ==========================================
-   SETTINGS UPDATE
-========================================== */
-
-function updateWatermarkSettings(){
-
-    watermarkSettings.text =
-    watermarkTextInput.value;
-
-    watermarkSettings.fontSize =
-    Number(
-        fontSizeInput.value
-    );
-
-    watermarkSettings.opacity =
-    Number(
-        opacityInput.value
-    );
-
-    watermarkSettings.rotation =
-    Number(
-        rotationInput.value
-    );
-
-    watermarkSettings.color =
-    watermarkColorInput.value;
-
-}
-
-watermarkTextInput.addEventListener(
-    "input",
-    updateWatermarkSettings
-);
-
-fontSizeInput.addEventListener(
-    "input",
-    updateWatermarkSettings
-);
-
-opacityInput.addEventListener(
-    "input",
-    updateWatermarkSettings
-);
-
-rotationInput.addEventListener(
-    "input",
-    updateWatermarkSettings
-);
-
-watermarkColorInput.addEventListener(
-    "input",
-    updateWatermarkSettings
-);
-
-/* ==========================================
-   OPEN PREVIEW
-========================================== */
-
-continuePreviewBtn.addEventListener(
-    "click",
-    async()=>{
-
-        watermarkSection.classList.add(
-            "hidden"
-        );
-
-        previewSection.classList.remove(
-            "hidden"
-        );
-
-        await renderPdfPage();
-
-        updatePreview();
-
-    }
-);
-
-/* ==========================================
-   BACK BUTTON
-========================================== */
-
-backToSettingsBtn.addEventListener(
-    "click",
-    ()=>{
-
-        previewSection.classList.add(
-            "hidden"
-        );
-
-        watermarkSection.classList.remove(
-            "hidden"
-        );
-
-    }
-);
-
-/* ==========================================
-   PDF RENDER
-========================================== */
-
-async function renderPdfPage(){
-
-    loadedPdf =
-    await pdfjsLib
-    .getDocument(
-        {
-            data:
-            uploadedPdfArrayBuffer
-        }
+       
+document
+    .getElementById(
+        "upload-section"
     )
-    .promise;
-
-    const page =
-    await loadedPdf.getPage(
-        1
+    .classList.add(
+        "hidden"
     );
 
-    const viewport =
-    page.getViewport(
-        {
-            scale : 1.5
-        }
+document
+    .getElementById(
+        "watermark-section"
+    )
+    .classList.remove(
+        "hidden"
     );
-
-    const context =
-    previewCanvas.getContext(
-        "2d"
-    );
-
-    previewCanvas.width =
-    viewport.width;
-
-    previewCanvas.height =
-    viewport.height;
-
-    await page.render(
-        {
-            canvasContext :
-            context,
-
-            viewport :
-            viewport
-        }
-    ).promise;
-
-}
-
+    }
+);
 /* ==========================================
-   WATERMARK PREVIEW
+   WATERMARK SETTINGS EVENTS
 ========================================== */
+
+const watermarkText =
+    document.getElementById(
+        "watermark-text"
+    );
+
+const fontSize =
+    document.getElementById(
+        "font-size"
+    );
+
+const opacity =
+    document.getElementById(
+        "opacity"
+    );
+
+const rotation =
+    document.getElementById(
+        "rotation"
+    );
+
+
+watermarkText.addEventListener(
+    "input",
+    (event)=>{
+
+        watermarkSettings.text =
+            event.target.value;
+
+        console.log(
+            watermarkSettings
+        );
+
+    }
+);
+
+
+fontSize.addEventListener(
+    "input",
+    (event)=>{
+
+        watermarkSettings.fontSize =
+            event.target.value;
+
+        console.log(
+            watermarkSettings
+        );
+
+    }
+);
+
+
+opacity.addEventListener(
+    "input",
+    (event)=>{
+
+        watermarkSettings.opacity =
+            event.target.value;
+
+        console.log(
+            watermarkSettings
+        );
+
+    }
+);
+
+
+rotation.addEventListener(
+    "input",
+    (event)=>{
+
+        watermarkSettings.rotation =
+            event.target.value;
+
+        console.log(
+            watermarkSettings
+        );
+
+    }
+);
+
+const watermarkPreview =
+    document.getElementById(
+        "watermark-preview"
+    );
+
 
 function updatePreview(){
 
     watermarkPreview.textContent =
-    watermarkSettings.text ||
-    "WATERMARK";
+        watermarkSettings.text ||
+        "WATERMARK";
 
     watermarkPreview.style.fontSize =
-    `${watermarkSettings.fontSize}px`;
+        watermarkSettings.fontSize
+        + "px";
 
     watermarkPreview.style.opacity =
-    watermarkSettings.opacity / 100;
-
-    watermarkPreview.style.color =
-    watermarkSettings.color;
+        watermarkSettings.opacity
+        / 100;
 
     watermarkPreview.style.transform =
-    `
-    translate(-50%,-50%)
-    rotate(
-        ${watermarkSettings.rotation}deg
-    )
-    `;
+        `rotate(
+            ${watermarkSettings.rotation}deg
+        )`;
 
 }
 
-updatePreview();
-/* ==========================================
-   EXPORT PDF
-========================================== */
 
-const continueExportBtn =
-document.getElementById(
-    "continue-export-btn"
+watermarkText.addEventListener(
+    "input",
+    updatePreview
 );
 
-continueExportBtn.addEventListener(
-    "click",
-    async()=>{
+fontSize.addEventListener(
+    "input",
+    updatePreview
+);
 
-        const pdfDoc =
-        await PDFLib.PDFDocument.load(
-            uploadedPdfArrayBuffer
-        );
+opacity.addEventListener(
+    "input",
+    updatePreview
+);
 
-        const pages =
-        pdfDoc.getPages();
+rotation.addEventListener(
+    "input",
+    updatePreview
+);
 
-        pages.forEach(
-            (page)=>{
+updatePreview();
+async function loadPdfPreview(
+    file
+){
 
-                const {
-                    width,
-                    height
-                } =
-                page.getSize();
+    const arrayBuffer =
+        await file.arrayBuffer();
 
-                page.drawText(
-                    watermarkSettings.text ||
-                    "WATERMARK",
-                    {
-
-                        x:
-                        width / 2 - 120,
-
-                        y:
-                        height / 2,
-
-                        size:
-                        watermarkSettings.fontSize,
-
-                        opacity:
-                        watermarkSettings.opacity / 100,
-
-                        rotate:
-                        PDFLib.degrees(
-                            watermarkSettings.rotation
-                        ),
-
-                        color:
-                        PDFLib.rgb(
-                            1,
-                            1,
-                            1
-                        )
-
-                    }
-                );
-
-            }
-        );
-
-        const pdfBytes =
-        await pdfDoc.save();
-
-        const blob =
-        new Blob(
-            [
-                pdfBytes
-            ],
+    loadedPdf =
+        await pdfjsLib.getDocument(
             {
-                type:
-                "application/pdf"
+                data:
+                    arrayBuffer
+            }
+        ).promise;
+
+}
+
+
+async function renderFirstPage(){
+
+    if(
+        !loadedPdf
+    ){
+        return;
+    }
+
+    const page =
+        await loadedPdf.getPage(
+            1
+        );
+
+    const canvas =
+        document.getElementById(
+            "pdf-preview-canvas"
+        );
+
+    const context =
+        canvas.getContext(
+            "2d"
+        );
+
+    const viewport =
+        page.getViewport(
+            {
+                scale:
+                    1.2
             }
         );
 
-        const url =
-        URL.createObjectURL(
-            blob
-        );
+    canvas.width =
+        viewport.width;
 
-        const link =
-        document.createElement(
-            "a"
-        );
+    canvas.height =
+        viewport.height;
 
-        link.href =
-        url;
+    await page.render(
+        {
+            canvasContext:
+                context,
 
-        link.download =
-        "watermarked.pdf";
+            viewport:
+                viewport
+        }
+    ).promise;
 
-        link.click();
+   }
 
-        URL.revokeObjectURL(
-            url
-        );
+/* ==========================================
+   NAVIGATION TO PREVIEW
+========================================== */
+
+const continuePreviewBtn =
+    document.getElementById(
+        "continue-preview-btn"
+    );
+
+continuePreviewBtn.addEventListener(
+    "click",
+    ()=>{
+
+        document
+            .getElementById(
+                "watermark-section"
+            )
+            .classList.add(
+                "hidden"
+            );
+
+        document
+            .getElementById(
+                "preview-section"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+        updatePreview();
+
+        renderFirstPage();
 
     }
 );
