@@ -23,15 +23,15 @@ body{
     background:
     linear-gradient(
         135deg,
-        #120000,
-        #3d0000,
-        #7a1010,
-        #d9480f,
-        #ff7b00,
-        #7c3aed
+        #120024,
+        #1e0b4b,
+        #312e81,
+        #4f46e5,
+        #7c3aed,
+        #ff6b35,
+        #ff3c3c
     );
-
-}
+    }
 
 /* ==========================================
    BACKGROUND GLOW
