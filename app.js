@@ -1,3 +1,7 @@
+/* ==========================================
+   PDF.JS WORKER
+========================================== */
+
 pdfjsLib.GlobalWorkerOptions.workerSrc =
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js";
 
@@ -148,7 +152,7 @@ pdfInput.addEventListener(
 );
 
 /* ==========================================
-   DRAG AND DROP
+   DRAG & DROP
 ========================================== */
 
 dropZone.addEventListener(
@@ -156,21 +160,6 @@ dropZone.addEventListener(
     (event)=>{
 
         event.preventDefault();
-
-        dropZone.classList.add(
-            "drag-active"
-        );
-
-    }
-);
-
-dropZone.addEventListener(
-    "dragleave",
-    ()=>{
-
-        dropZone.classList.remove(
-            "drag-active"
-        );
 
     }
 );
@@ -180,10 +169,6 @@ dropZone.addEventListener(
     async(event)=>{
 
         event.preventDefault();
-
-        dropZone.classList.remove(
-            "drag-active"
-        );
 
         const file =
         event.dataTransfer.files[0];
@@ -215,7 +200,7 @@ async function handlePdfFile(
     ){
 
         alert(
-            "Please select PDF only."
+            "Please select a PDF file."
         );
 
         return;
@@ -230,9 +215,6 @@ async function handlePdfFile(
 
     fileNameElement.textContent =
     `Loaded: ${file.name}`;
-
-    fileNameElement.style.display =
-    "block";
 
     uploadSection.classList.add(
         "hidden"
@@ -299,7 +281,7 @@ watermarkColorInput.addEventListener(
 );
 
 /* ==========================================
-   PREVIEW OPEN
+   OPEN PREVIEW
 ========================================== */
 
 continuePreviewBtn.addEventListener(
@@ -314,7 +296,7 @@ continuePreviewBtn.addEventListener(
             "hidden"
         );
 
-        await loadPdfPreview();
+        await renderPdfPage();
 
         updatePreview();
 
@@ -341,10 +323,10 @@ backToSettingsBtn.addEventListener(
 );
 
 /* ==========================================
-   LOAD PDF PREVIEW
+   PDF RENDER
 ========================================== */
 
-async function loadPdfPreview(){
+async function renderPdfPage(){
 
     loadedPdf =
     await pdfjsLib
@@ -421,4 +403,3 @@ function updatePreview(){
 }
 
 updatePreview();
-
