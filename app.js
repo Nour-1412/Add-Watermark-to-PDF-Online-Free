@@ -117,15 +117,17 @@ const watermarkSettings = {
 /* ==========================================
    FILE BUTTON
 ========================================== */
+if (chooseFileBtn && pdfInput) {
 
-chooseFileBtn.addEventListener(
-    "click",
-    ()=>{
+    chooseFileBtn.addEventListener(
+        "click",
+        () => {
+            pdfInput.click();
+        }
+    );
 
-        pdfInput.click();
+}
 
-    }
-);
 
 /* ==========================================
    FILE INPUT
