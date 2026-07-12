@@ -316,4 +316,186 @@ async function(file){
     }
 
 };
+/* ==========================================
+   PREVIEW SYSTEM
+========================================== */
+
+const continuePreviewBtn =
+    document.getElementById(
+        "continue-preview-btn"
+    );
+
+const backToSettingsBtn =
+    document.getElementById(
+        "back-to-settings-btn"
+    );
+
+const watermarkPreview =
+    document.getElementById(
+        "watermark-preview"
+    );
+
+const previewSection =
+    document.getElementById(
+        "preview-section"
+    );
+
+const previewCanvas =
+    document.getElementById(
+        "pdf-preview-canvas"
+    );
+
+let loadedPdf = null;
+
+/* ==========================================
+   OPEN PREVIEW
+========================================== */
+
+continuePreviewBtn.addEventListener(
+    "click",
+    async ()=>{
+
+        watermarkSection.classList.add(
+            "hidden"
+        );
+
+        previewSection.classList.remove(
+            "hidden"
+        );
+
+        await loadPdfPreview();
+
+        updatePreview();
+
+    }
+);
+
+/* ==========================================
+   BACK BUTTON
+========================================== */
+
+backToSettingsBtn.addEventListener(
+    "click",
+    ()=>{
+
+        previewSection.classList.add(
+            "hidden"
+        );
+
+        watermarkSection.classList.remove(
+            "hidden"
+        );
+
+    }
+);
+
+/* ==========================================
+   LOAD PDF
+========================================== */
+
+async function loadPdfPreview(){
+
+    loadedPdf =
+        await pdfjsLib
+            .getDocument(
+                {
+                    data:
+                        uploadedPdfArrayBuffer
+                }
+            )
+            .promise;
+
+    const page =
+        await loadedPdf.getPage(
+            1
+        );
+
+    const viewport =
+        page.getViewport(
+            {
+                scale:
+                    1.5
+            }
+        );
+
+    const context =
+        previewCanvas.getContext(
+            "2d"
+        );
+
+    previewCanvas.width =
+        viewport.width;
+
+    previewCanvas.height =
+        viewport.height;
+
+    await page.render(
+        {
+            canvasContext:
+                context,
+
+            viewport:
+                viewport
+        }
+    ).promise;
+
+}
+
+/* ==========================================
+   WATERMARK LIVE PREVIEW
+========================================== */
+
+function updatePreview(){
+
+    watermarkPreview.textContent =
+        watermarkSettings.text ||
+        "WATERMARK";
+
+    watermarkPreview.style.fontSize =
+        `${watermarkSettings.fontSize}px`;
+
+    watermarkPreview.style.opacity =
+        watermarkSettings.opacity / 100;
+
+    watermarkPreview.style.color =
+        watermarkSettings.color;
+
+    watermarkPreview.style.transform =
+        `
+        translate(-50%,-50%)
+        rotate(
+            ${watermarkSettings.rotation}deg
+        )
+        `;
+
+}
+
+/* ==========================================
+   LIVE UPDATE EVENTS
+========================================== */
+
+watermarkTextInput.addEventListener(
+    "input",
+    updatePreview
+);
+
+fontSizeInput.addEventListener(
+    "input",
+    updatePreview
+);
+
+opacityInput.addEventListener(
+    "input",
+    updatePreview
+);
+
+rotationInput.addEventListener(
+    "input",
+    updatePreview
+);
+
+watermarkColorInput.addEventListener(
+    "input",
+    updatePreview
+);
 
