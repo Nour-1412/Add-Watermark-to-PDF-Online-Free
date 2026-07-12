@@ -286,8 +286,10 @@ watermarkColorInput.addEventListener(
    OPEN PREVIEW
 ========================================== */
 
-if continuePreviewBtn.addEventListener(
-    "click",
+if (continueExportBtn) {
+
+    continueExportBtn.addEventListener(
+        "click",
     async()=>{
 
         watermarkSection.classList.add(
@@ -302,15 +304,19 @@ if continuePreviewBtn.addEventListener(
 
         updatePreview();
 
-    }
-);
+        }
+    );
 
+}
+}
 /* ==========================================
    BACK BUTTON
 ========================================== */
 
-if backToSettingsBtn.addEventListener(
-    "click",
+if (backToSettingsBtn) {
+
+    backToSettingsBtn.addEventListener(
+        "click",
     ()=>{
 
         previewSection.classList.add(
@@ -323,7 +329,7 @@ if backToSettingsBtn.addEventListener(
 
     }
 );
-
+}
 /* ==========================================
    PDF RENDER
 ========================================== */
