@@ -11,7 +11,7 @@
     >
 
     <title>
-        WebBag PDF Watermark Tool
+        PDF Watermark Tool
     </title>
 
     <link
@@ -23,86 +23,59 @@
 
 <body>
 
-    <!-- ======================================
-         BACKGROUND EFFECT
-    ======================================= -->
-
     <div class="background-glow"></div>
-
-    <!-- ======================================
-         MAIN CONTAINER
-    ======================================= -->
 
     <main class="app-container">
 
-        <!-- ======================================
-             HEADER
-        ======================================= -->
+        <!-- HERO -->
 
-        <header class="hero-section">
+        <section class="hero-section">
 
             <h1 class="app-title">
 
-                WebBag PDF Watermark Tool
+                PDF Watermark Tool
 
             </h1>
 
             <p class="app-description">
 
-                Add professional watermarks to your PDF
-                documents directly in your browser.
+                Add beautiful custom watermarks
+                to your PDF files directly inside
+                your browser.
 
             </p>
 
-        </header>
+        </section>
 
-        <!-- ======================================
-             STEP INDICATOR
-        ======================================= -->
 
-        <div class="steps-container">
+        <!-- STEPS -->
+
+        <section class="steps-container">
 
             <div class="step active">
-
-                1
-                <span>
-                    Upload PDF
-                </span>
-
+                <div>1</div>
+                <span>Upload</span>
             </div>
 
             <div class="step">
-
-                2
-                <span>
-                    Watermark
-                </span>
-
+                <div>2</div>
+                <span>Watermark</span>
             </div>
 
             <div class="step">
-
-                3
-                <span>
-                    Preview
-                </span>
-
+                <div>3</div>
+                <span>Preview</span>
             </div>
 
             <div class="step">
-
-                4
-                <span>
-                    Export
-                </span>
-
+                <div>4</div>
+                <span>Export</span>
             </div>
 
-        </div>
+        </section>
 
-        <!-- ======================================
-             UPLOAD SECTION
-        ======================================= -->
+
+        <!-- UPLOAD -->
 
         <section
             id="upload-section"
@@ -157,217 +130,199 @@
                 <div
                     id="file-name"
                     class="file-name"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- WATERMARK SETTINGS -->
+
+        <section
+            id="watermark-section"
+            class="glass-card hidden"
+        >
+
+            <h2 class="section-title">
+
+                Watermark Settings
+
+            </h2>
+
+            <div class="settings-container">
+
+                <div class="input-group">
+
+                    <label>
+                        Watermark Text
+                    </label>
+
+                    <input
+                        id="watermark-text"
+                        type="text"
+                        placeholder="Enter watermark text"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Font Size
+                    </label>
+
+                    <input
+                        id="font-size"
+                        type="range"
+                        min="12"
+                        max="120"
+                        value="32"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Opacity
+                    </label>
+
+                    <input
+                        id="opacity"
+                        type="range"
+                        min="10"
+                        max="100"
+                        value="50"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Rotation
+                    </label>
+
+                    <input
+                        id="rotation"
+                        type="range"
+                        min="-180"
+                        max="180"
+                        value="-45"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Watermark Color
+                    </label>
+
+                    <input
+                        id="watermark-color"
+                        type="color"
+                        value="#ffffff"
+                    >
+
+                </div>
+
+                <button
+                    id="continue-preview-btn"
+                    class="primary-button"
                 >
+
+                    Continue To Preview
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- PREVIEW -->
+
+        <section
+            id="preview-section"
+            class="glass-card hidden"
+        >
+
+            <h2 class="section-title">
+
+                PDF Preview
+
+            </h2>
+
+            <div class="preview-card">
+
+                <div class="pdf-preview-container">
+
+                    <canvas
+                        id="pdf-preview-canvas"
+                    ></canvas>
+
+                    <div
+                        id="watermark-preview"
+                    >
+
+                        WATERMARK
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </section>
-<!-- ======================================
-     WATERMARK SETTINGS SECTION
-====================================== -->
+            <div class="preview-actions">
 
-<section
-    id="watermark-section"
-    class="glass-card hidden"
->
+                <button
+                    id="back-to-settings-btn"
+                    class="primary-button"
+                >
 
-    <h2 class="section-title">
+                    Back To Settings
 
-        Watermark Settings
+                </button>
 
-    </h2>
+                <button
+                    id="continue-export-btn"
+                    class="primary-button"
+                >
 
-    <div class="settings-container">
+                    Export PDF
 
-        <!-- WATERMARK TEXT -->
-
-        <div class="input-group">
-
-            <label>
-
-                Watermark Text
-
-            </label>
-
-            <input
-                id="watermark-text"
-                type="text"
-                placeholder="Enter watermark text"
-            >
-
-        </div>
-
-        <!-- FONT SIZE -->
-
-        <div class="input-group">
-
-            <label>
-
-                Font Size
-
-            </label>
-
-            <input
-                id="font-size"
-                type="range"
-                min="12"
-                max="120"
-                value="32"
-            >
-
-        </div>
-
-        <!-- OPACITY -->
-
-        <div class="input-group">
-
-            <label>
-
-                Opacity
-
-            </label>
-
-            <input
-                id="opacity"
-                type="range"
-                min="10"
-                max="100"
-                value="50"
-            >
-
-        </div>
-
-        <!-- ROTATION -->
-
-        <div class="input-group">
-
-            <label>
-
-                Rotation
-
-            </label>
-
-            <input
-                id="rotation"
-                type="range"
-                min="-180"
-                max="180"
-                value="-45"
-            >
-
-        </div>
-
-        <!-- COLOR -->
-
-        <div class="input-group">
-
-            <label>
-
-                Watermark Color
-
-            </label>
-
-            <input
-                id="watermark-color"
-                type="color"
-                value="#ffffff"
-            >
-
-        </div>
-
-        <!-- NEXT BUTTON -->
-
-        <button
-            id="continue-preview-btn"
-            class="primary-button"
-        >
-
-            Continue To Preview
-
-        </button>
-
-    </div>
-
-</section>
-        <!-- ======================================
-     PREVIEW SECTION
-====================================== -->
-
-<section
-    id="preview-section"
-    class="glass-card hidden"
->
-
-    <h2 class="section-title">
-
-        PDF Preview
-
-    </h2>
-
-    <div class="preview-card">
-
-        <div
-            class="pdf-preview-container"
-        >
-
-            <canvas
-                id="pdf-preview-canvas"
-            >
-            </canvas>
-
-            <div
-                id="watermark-preview"
-            >
-
-                WATERMARK
+                </button>
 
             </div>
 
-        </div>
+        </section>
 
-    </div>
 
-    <div
-        class="preview-actions"
-    >
+        <!-- EXPORT -->
 
-        <button
-            id="back-to-settings-btn"
-            class="primary-button"
+        <section
+            id="export-section"
+            class="glass-card hidden"
         >
 
-            Back To Settings
+        </section>
 
-        </button>
 
-        <button
-            id="continue-export-btn"
-            class="primary-button"
-        >
+        <!-- FOOTER -->
 
-            Continue To Export
+        <footer class="footer">
 
-        </button>
+            <p>
 
-    </div>
+                © 2026 PDF Watermark Tool
 
-</section>
-<section
-    id="watermark-section"
-    class="glass-card hidden"
->
+            </p>
 
-    ...
-
-</section>
+        </footer>
 
     </main>
-
-    <!-- ======================================
-         LIBRARIES
-    ======================================= -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.js"></script>
 
@@ -377,4 +332,4 @@
 
 </body>
 
-        </html>
+    </html>
