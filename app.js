@@ -403,3 +403,106 @@ function updatePreview(){
 }
 
 updatePreview();
+/* ==========================================
+   EXPORT PDF
+========================================== */
+
+const continueExportBtn =
+document.getElementById(
+    "continue-export-btn"
+);
+
+continueExportBtn.addEventListener(
+    "click",
+    async()=>{
+
+        const pdfDoc =
+        await PDFLib.PDFDocument.load(
+            uploadedPdfArrayBuffer
+        );
+
+        const pages =
+        pdfDoc.getPages();
+
+        pages.forEach(
+            (page)=>{
+
+                const {
+                    width,
+                    height
+                } =
+                page.getSize();
+
+                page.drawText(
+                    watermarkSettings.text ||
+                    "WATERMARK",
+                    {
+
+                        x:
+                        width / 2 - 120,
+
+                        y:
+                        height / 2,
+
+                        size:
+                        watermarkSettings.fontSize,
+
+                        opacity:
+                        watermarkSettings.opacity / 100,
+
+                        rotate:
+                        PDFLib.degrees(
+                            watermarkSettings.rotation
+                        ),
+
+                        color:
+                        PDFLib.rgb(
+                            1,
+                            1,
+                            1
+                        )
+
+                    }
+                );
+
+            }
+        );
+
+        const pdfBytes =
+        await pdfDoc.save();
+
+        const blob =
+        new Blob(
+            [
+                pdfBytes
+            ],
+            {
+                type:
+                "application/pdf"
+            }
+        );
+
+        const url =
+        URL.createObjectURL(
+            blob
+        );
+
+        const link =
+        document.createElement(
+            "a"
+        );
+
+        link.href =
+        url;
+
+        link.download =
+        "watermarked.pdf";
+
+        link.click();
+
+        URL.revokeObjectURL(
+            url
+        );
+
+    }
+);
