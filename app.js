@@ -1,26 +1,89 @@
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js";
+
 /* ==========================================
-   PDF UPLOAD SYSTEM
+   ELEMENTS
 ========================================== */
 
 const pdfInput =
-    document.getElementById(
-        "pdf-input"
-    );
+document.getElementById(
+    "pdf-input"
+);
 
 const chooseFileBtn =
-    document.getElementById(
-        "choose-file-btn"
-    );
+document.getElementById(
+    "choose-file-btn"
+);
 
 const dropZone =
-    document.getElementById(
-        "drop-zone"
-    );
+document.getElementById(
+    "drop-zone"
+);
 
 const fileNameElement =
-    document.getElementById(
-        "file-name"
-    );
+document.getElementById(
+    "file-name"
+);
+
+const uploadSection =
+document.getElementById(
+    "upload-section"
+);
+
+const watermarkSection =
+document.getElementById(
+    "watermark-section"
+);
+
+const previewSection =
+document.getElementById(
+    "preview-section"
+);
+
+const continuePreviewBtn =
+document.getElementById(
+    "continue-preview-btn"
+);
+
+const backToSettingsBtn =
+document.getElementById(
+    "back-to-settings-btn"
+);
+
+const previewCanvas =
+document.getElementById(
+    "pdf-preview-canvas"
+);
+
+const watermarkPreview =
+document.getElementById(
+    "watermark-preview"
+);
+
+const watermarkTextInput =
+document.getElementById(
+    "watermark-text"
+);
+
+const fontSizeInput =
+document.getElementById(
+    "font-size"
+);
+
+const opacityInput =
+document.getElementById(
+    "opacity"
+);
+
+const rotationInput =
+document.getElementById(
+    "rotation"
+);
+
+const watermarkColorInput =
+document.getElementById(
+    "watermark-color"
+);
 
 /* ==========================================
    GLOBAL STATE
@@ -29,15 +92,31 @@ const fileNameElement =
 let uploadedFile = null;
 
 let uploadedPdfArrayBuffer =
-    null;
+null;
+
+let loadedPdf = null;
+
+const watermarkSettings = {
+
+    text : "",
+
+    fontSize : 32,
+
+    opacity : 50,
+
+    rotation : -45,
+
+    color : "#ffffff"
+
+};
 
 /* ==========================================
-   BUTTON CLICK
+   FILE BUTTON
 ========================================== */
 
 chooseFileBtn.addEventListener(
     "click",
-    () => {
+    ()=>{
 
         pdfInput.click();
 
@@ -50,10 +129,10 @@ chooseFileBtn.addEventListener(
 
 pdfInput.addEventListener(
     "change",
-    async (event)=>{
+    async(event)=>{
 
         const file =
-            event.target.files[0];
+        event.target.files[0];
 
         if(
             file
@@ -69,7 +148,7 @@ pdfInput.addEventListener(
 );
 
 /* ==========================================
-   DRAG EVENTS
+   DRAG AND DROP
 ========================================== */
 
 dropZone.addEventListener(
@@ -98,7 +177,7 @@ dropZone.addEventListener(
 
 dropZone.addEventListener(
     "drop",
-    async (event)=>{
+    async(event)=>{
 
         event.preventDefault();
 
@@ -107,9 +186,7 @@ dropZone.addEventListener(
         );
 
         const file =
-            event
-                .dataTransfer
-                .files[0];
+        event.dataTransfer.files[0];
 
         if(
             file
@@ -125,7 +202,7 @@ dropZone.addEventListener(
 );
 
 /* ==========================================
-   PDF HANDLER
+   HANDLE PDF
 ========================================== */
 
 async function handlePdfFile(
@@ -138,7 +215,7 @@ async function handlePdfFile(
     ){
 
         alert(
-            "Please select a PDF file only."
+            "Please select PDF only."
         );
 
         return;
@@ -146,84 +223,16 @@ async function handlePdfFile(
     }
 
     uploadedFile =
-        file;
+    file;
 
     uploadedPdfArrayBuffer =
-        await file.arrayBuffer();
+    await file.arrayBuffer();
 
     fileNameElement.textContent =
-        `Loaded: ${file.name}`;
+    `Loaded: ${file.name}`;
 
     fileNameElement.style.display =
-        "block";
-
-    console.log(
-        "PDF Loaded Successfully"
-    );
-
-}
-/* ==========================================
-   WATERMARK SETTINGS SYSTEM
-========================================== */
-
-const watermarkSection =
-    document.getElementById(
-        "watermark-section"
-    );
-
-const watermarkTextInput =
-    document.getElementById(
-        "watermark-text"
-    );
-
-const fontSizeInput =
-    document.getElementById(
-        "font-size"
-    );
-
-const opacityInput =
-    document.getElementById(
-        "opacity"
-    );
-
-const rotationInput =
-    document.getElementById(
-        "rotation"
-    );
-
-const watermarkColorInput =
-    document.getElementById(
-        "watermark-color"
-    );
-
-/* ==========================================
-   WATERMARK STATE
-========================================== */
-
-const watermarkSettings = {
-
-    text: "",
-
-    fontSize: 32,
-
-    opacity: 50,
-
-    rotation: -45,
-
-    color: "#ffffff"
-
-};
-
-/* ==========================================
-   SHOW WATERMARK SETTINGS
-========================================== */
-
-function showWatermarkSection(){
-
-    const uploadSection =
-        document.getElementById(
-            "upload-section"
-        );
+    "block";
 
     uploadSection.classList.add(
         "hidden"
@@ -236,37 +245,33 @@ function showWatermarkSection(){
 }
 
 /* ==========================================
-   UPDATE SETTINGS
+   SETTINGS UPDATE
 ========================================== */
 
 function updateWatermarkSettings(){
 
     watermarkSettings.text =
-        watermarkTextInput.value;
+    watermarkTextInput.value;
 
     watermarkSettings.fontSize =
-        Number(
-            fontSizeInput.value
-        );
+    Number(
+        fontSizeInput.value
+    );
 
     watermarkSettings.opacity =
-        Number(
-            opacityInput.value
-        );
+    Number(
+        opacityInput.value
+    );
 
     watermarkSettings.rotation =
-        Number(
-            rotationInput.value
-        );
+    Number(
+        rotationInput.value
+    );
 
     watermarkSettings.color =
-        watermarkColorInput.value;
+    watermarkColorInput.value;
 
 }
-
-/* ==========================================
-   INPUT EVENTS
-========================================== */
 
 watermarkTextInput.addEventListener(
     "input",
@@ -294,66 +299,12 @@ watermarkColorInput.addEventListener(
 );
 
 /* ==========================================
-   AFTER SUCCESSFUL PDF LOAD
-========================================== */
-
-const originalHandlePdfFile =
-    handlePdfFile;
-
-handlePdfFile =
-async function(file){
-
-    await originalHandlePdfFile(
-        file
-    );
-
-    if(
-        uploadedFile
-    ){
-
-        showWatermarkSection();
-
-    }
-
-};
-/* ==========================================
-   PREVIEW SYSTEM
-========================================== */
-
-const continuePreviewBtn =
-    document.getElementById(
-        "continue-preview-btn"
-    );
-
-const backToSettingsBtn =
-    document.getElementById(
-        "back-to-settings-btn"
-    );
-
-const watermarkPreview =
-    document.getElementById(
-        "watermark-preview"
-    );
-
-const previewSection =
-    document.getElementById(
-        "preview-section"
-    );
-
-const previewCanvas =
-    document.getElementById(
-        "pdf-preview-canvas"
-    );
-
-let loadedPdf = null;
-
-/* ==========================================
-   OPEN PREVIEW
+   PREVIEW OPEN
 ========================================== */
 
 continuePreviewBtn.addEventListener(
     "click",
-    async ()=>{
+    async()=>{
 
         watermarkSection.classList.add(
             "hidden"
@@ -390,112 +341,84 @@ backToSettingsBtn.addEventListener(
 );
 
 /* ==========================================
-   LOAD PDF
+   LOAD PDF PREVIEW
 ========================================== */
 
 async function loadPdfPreview(){
 
     loadedPdf =
-        await pdfjsLib
-            .getDocument(
-                {
-                    data:
-                        uploadedPdfArrayBuffer
-                }
-            )
-            .promise;
+    await pdfjsLib
+    .getDocument(
+        {
+            data:
+            uploadedPdfArrayBuffer
+        }
+    )
+    .promise;
 
     const page =
-        await loadedPdf.getPage(
-            1
-        );
+    await loadedPdf.getPage(
+        1
+    );
 
     const viewport =
-        page.getViewport(
-            {
-                scale:
-                    1.5
-            }
-        );
+    page.getViewport(
+        {
+            scale : 1.5
+        }
+    );
 
     const context =
-        previewCanvas.getContext(
-            "2d"
-        );
+    previewCanvas.getContext(
+        "2d"
+    );
 
     previewCanvas.width =
-        viewport.width;
+    viewport.width;
 
     previewCanvas.height =
-        viewport.height;
+    viewport.height;
 
     await page.render(
         {
-            canvasContext:
-                context,
+            canvasContext :
+            context,
 
-            viewport:
-                viewport
+            viewport :
+            viewport
         }
     ).promise;
 
 }
 
 /* ==========================================
-   WATERMARK LIVE PREVIEW
+   WATERMARK PREVIEW
 ========================================== */
 
 function updatePreview(){
 
     watermarkPreview.textContent =
-        watermarkSettings.text ||
-        "WATERMARK";
+    watermarkSettings.text ||
+    "WATERMARK";
 
     watermarkPreview.style.fontSize =
-        `${watermarkSettings.fontSize}px`;
+    `${watermarkSettings.fontSize}px`;
 
     watermarkPreview.style.opacity =
-        watermarkSettings.opacity / 100;
+    watermarkSettings.opacity / 100;
 
     watermarkPreview.style.color =
-        watermarkSettings.color;
+    watermarkSettings.color;
 
     watermarkPreview.style.transform =
-        `
-        translate(-50%,-50%)
-        rotate(
-            ${watermarkSettings.rotation}deg
-        )
-        `;
+    `
+    translate(-50%,-50%)
+    rotate(
+        ${watermarkSettings.rotation}deg
+    )
+    `;
 
 }
 
-/* ==========================================
-   LIVE UPDATE EVENTS
-========================================== */
-
-watermarkTextInput.addEventListener(
-    "input",
-    updatePreview
-);
-
-fontSizeInput.addEventListener(
-    "input",
-    updatePreview
-);
-
-opacityInput.addEventListener(
-    "input",
-    updatePreview
-);
-
-rotationInput.addEventListener(
-    "input",
-    updatePreview
-);
-
-watermarkColorInput.addEventListener(
-    "input",
-    updatePreview
-);
+updatePreview();
 
