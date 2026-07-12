@@ -707,7 +707,7 @@ body{
     width:100%;
 
     max-width:700px;
-
+min-height:500px;
     height:450px;
 
     margin:40px auto;
@@ -778,12 +778,13 @@ body{
     justify-content:center;
 
 }
-
 #pdf-preview-canvas{
 
-    max-width:100%;
+    width:100%;
 
-    max-height:100%;
+    height:auto;
+
+    display:block;
 
     border-radius:20px;
 
