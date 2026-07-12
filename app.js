@@ -162,4 +162,158 @@ async function handlePdfFile(
     );
 
 }
+/* ==========================================
+   WATERMARK SETTINGS SYSTEM
+========================================== */
+
+const watermarkSection =
+    document.getElementById(
+        "watermark-section"
+    );
+
+const watermarkTextInput =
+    document.getElementById(
+        "watermark-text"
+    );
+
+const fontSizeInput =
+    document.getElementById(
+        "font-size"
+    );
+
+const opacityInput =
+    document.getElementById(
+        "opacity"
+    );
+
+const rotationInput =
+    document.getElementById(
+        "rotation"
+    );
+
+const watermarkColorInput =
+    document.getElementById(
+        "watermark-color"
+    );
+
+/* ==========================================
+   WATERMARK STATE
+========================================== */
+
+const watermarkSettings = {
+
+    text: "",
+
+    fontSize: 32,
+
+    opacity: 50,
+
+    rotation: -45,
+
+    color: "#ffffff"
+
+};
+
+/* ==========================================
+   SHOW WATERMARK SETTINGS
+========================================== */
+
+function showWatermarkSection(){
+
+    const uploadSection =
+        document.getElementById(
+            "upload-section"
+        );
+
+    uploadSection.classList.add(
+        "hidden"
+    );
+
+    watermarkSection.classList.remove(
+        "hidden"
+    );
+
+}
+
+/* ==========================================
+   UPDATE SETTINGS
+========================================== */
+
+function updateWatermarkSettings(){
+
+    watermarkSettings.text =
+        watermarkTextInput.value;
+
+    watermarkSettings.fontSize =
+        Number(
+            fontSizeInput.value
+        );
+
+    watermarkSettings.opacity =
+        Number(
+            opacityInput.value
+        );
+
+    watermarkSettings.rotation =
+        Number(
+            rotationInput.value
+        );
+
+    watermarkSettings.color =
+        watermarkColorInput.value;
+
+}
+
+/* ==========================================
+   INPUT EVENTS
+========================================== */
+
+watermarkTextInput.addEventListener(
+    "input",
+    updateWatermarkSettings
+);
+
+fontSizeInput.addEventListener(
+    "input",
+    updateWatermarkSettings
+);
+
+opacityInput.addEventListener(
+    "input",
+    updateWatermarkSettings
+);
+
+rotationInput.addEventListener(
+    "input",
+    updateWatermarkSettings
+);
+
+watermarkColorInput.addEventListener(
+    "input",
+    updateWatermarkSettings
+);
+
+/* ==========================================
+   AFTER SUCCESSFUL PDF LOAD
+========================================== */
+
+const originalHandlePdfFile =
+    handlePdfFile;
+
+handlePdfFile =
+async function(file){
+
+    await originalHandlePdfFile(
+        file
+    );
+
+    if(
+        uploadedFile
+    ){
+
+        showWatermarkSection();
+
+    }
+
+};
 
