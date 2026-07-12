@@ -286,7 +286,7 @@ watermarkColorInput.addEventListener(
    OPEN PREVIEW
 ========================================== */
 
-if (continueExportBtn) {
+ (continueExportBtn) {
 
     continueExportBtn.addEventListener(
         "click",
@@ -313,7 +313,7 @@ if (continueExportBtn) {
    BACK BUTTON
 ========================================== */
 
-if (backToSettingsBtn) {
+ (backToSettingsBtn) {
 
     backToSettingsBtn.addEventListener(
         "click",
@@ -420,7 +420,7 @@ document.getElementById(
     "continue-export-btn"
 );
 
-if continueExportBtn.addEventListener(
+ continueExportBtn.addEventListener(
     "click",
     async()=>{
 
