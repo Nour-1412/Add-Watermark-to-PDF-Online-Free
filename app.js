@@ -394,7 +394,8 @@ async function renderFirstPage(){
 
     canvas.height =
         viewport.height;
-
+canvas.style.display =
+    "block";
     await page.render(
         {
             canvasContext:
