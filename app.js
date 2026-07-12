@@ -1,8 +1,8 @@
 /* ==========================================
    PDF.JS WORKER
 ========================================== */
-alert("APP.JS WORKING");
-//pdfjsLib.GlobalWorkerOptions.workerSrc =
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js";
 
 /* ==========================================
@@ -117,17 +117,15 @@ const watermarkSettings = {
 /* ==========================================
    FILE BUTTON
 ========================================== */
-if (chooseFileBtn && pdfInput) {
 
-    chooseFileBtn.addEventListener(
-        "click",
-        () => {
-            pdfInput.click();
-        }
-    );
+chooseFileBtn.addEventListener(
+    "click",
+    ()=>{
 
-}
+        pdfInput.click();
 
+    }
+);
 
 /* ==========================================
    FILE INPUT
@@ -286,10 +284,8 @@ watermarkColorInput.addEventListener(
    OPEN PREVIEW
 ========================================== */
 
- (continueExportBtn) {
-
-    continueExportBtn.addEventListener(
-        "click",
+continuePreviewBtn.addEventListener(
+    "click",
     async()=>{
 
         watermarkSection.classList.add(
@@ -304,19 +300,15 @@ watermarkColorInput.addEventListener(
 
         updatePreview();
 
-        }
-    );
+    }
+);
 
-}
-}
 /* ==========================================
    BACK BUTTON
 ========================================== */
 
- (backToSettingsBtn) {
-
-    backToSettingsBtn.addEventListener(
-        "click",
+backToSettingsBtn.addEventListener(
+    "click",
     ()=>{
 
         previewSection.classList.add(
@@ -329,7 +321,7 @@ watermarkColorInput.addEventListener(
 
     }
 );
-}
+
 /* ==========================================
    PDF RENDER
 ========================================== */
@@ -420,7 +412,7 @@ document.getElementById(
     "continue-export-btn"
 );
 
- continueExportBtn.addEventListener(
+continueExportBtn.addEventListener(
     "click",
     async()=>{
 
